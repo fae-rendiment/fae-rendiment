@@ -1,0 +1,71 @@
+rules_version = '2';
+// FAE · Àrea de rendiment — qui pot llegir i escriure cada dada.
+// staff: tot · coach (entrenador): només el seu grup, sense escriure · athlete (corredor): només les seves dades.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function profilePath() { return /databases/$(database)/documents/users/$(request.auth.uid); }
+    function hasProfile() { return signedIn() && exists(profilePath()); }
+    function me() { return get(profilePath()).data; }
+    function active() { return hasProfile() && me().active == true; }
+    function isStaff() { return active() && me().role == 'staff'; }
+    function isCoach() { return active() && me().role == 'coach' && me().eq != ''; }
+    function isAthlete() { return active() && me().role == 'athlete' && me().aid != ''; }
+
+    // Perfils d'usuari. Només l'equip tècnic els crea i els modifica.
+    // Excepció única: el primer compte de staff (correu fix) es pot crear el seu propi perfil de staff.
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isStaff());
+      allow create: if isStaff()
+        || (signedIn() && request.auth.uid == uid
+            && request.auth.token.email == 'polferrer95@gmail.com'
+            && request.resource.data.role == 'staff' && request.resource.data.active == true);
+      allow update, delete: if isStaff();
+    }
+
+    // Fitxa del corredor (tests, sessions, warm-up…)
+    match /athletes/{id} {
+      allow read: if isStaff()
+        || (isCoach() && resource.data.eq == me().eq)
+        || (isAthlete() && id == me().aid);
+      allow write: if isStaff();
+    }
+
+    // Benestar i àrea mèdica (part visible per entrenador i corredor)
+    match /salut/{id} {
+      allow read: if isStaff()
+        || (isCoach() && resource.data.eq == me().eq)
+        || (isAthlete() && id == me().aid);
+      allow write: if isStaff();
+    }
+
+    // Feedback de l'equip i comunicació amb l'equip mèdic: només equip tècnic
+    match /salut_priv/{id} {
+      allow read, write: if isStaff();
+    }
+
+    // Informes publicats
+    match /informes/{id} {
+      allow read: if isStaff()
+        || (isCoach() && resource.data.eq == me().eq)
+        || (isAthlete() && resource.data.aid == me().aid);
+      allow write: if isStaff();
+    }
+
+    // Configuració (modalitats, grups, objectius) i fotos: lectura per a qualsevol usuari actiu
+    match /config/{id} {
+      allow read: if active();
+      allow write: if isStaff();
+    }
+    match /fotos/{id} {
+      allow read: if active();
+      allow write: if isStaff();
+    }
+
+    // Qualsevol altra cosa: tancat
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
