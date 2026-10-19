@@ -1807,8 +1807,8 @@ function pfResultsTable(a, rows, clickable){
 }
 /* Dades corporals: semàfor (Excel·lent = zona del preparador físic; la resta, bandes al voltant) */
 const BODY_REF = {
-  M:{imc:{ok:[24,26.5], mid:[22.5,28], warn:[21,30]}, fat:{ok:[8,11], mid:[6,13], warn:[5,16]}, muscle:{ok:53, mid:50, warn:47}},
-  F:{imc:{ok:[22.5,25.5], mid:[21,27], warn:[19.5,29]}, fat:{ok:[13,16], mid:[11,19], warn:[9,23]}, muscle:{ok:49, mid:46, warn:43}} };
+  M:{imc:{ok:[24,26.5], mid:[22.5,28], warn:[21,30]}, fat:{ok:[8,11], mid:[7.5,13.5], warn:[7,15.5]}, muscle:{ok:53, mid:50, warn:47}},
+  F:{imc:{ok:[22.5,25.5], mid:[21,27], warn:[19.5,29]}, fat:{ok:[13,16], mid:[12,18.5], warn:[11,21]}, muscle:{ok:49, mid:46, warn:43}} };
 const inR = (v,r) => v>=r[0] && v<=r[1];
 const bandLv = (v,R) => v==null?'na': inR(v,R.ok)?'ok': inR(v,R.mid)?'mid': inR(v,R.warn)?'warn':'bad';
 const minLv = (v,R) => v==null?'na': v>=R.ok?'ok': v>=R.mid?'mid': v>=R.warn?'warn':'bad';
