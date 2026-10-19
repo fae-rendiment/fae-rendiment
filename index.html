@@ -279,6 +279,20 @@ window.claude = { use: async n => (await window.FAE_READY).cap(n) };
 </div>
 
 <style>
+.bgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.btile{border:1px solid var(--line);border-left:6px solid var(--muted);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;background:var(--card,#fff)}
+.btile.lv-ok{border-left-color:var(--ok);background:linear-gradient(90deg,var(--ok-soft),transparent 70%)}
+.btile.lv-mid{border-left-color:var(--mid);background:linear-gradient(90deg,var(--mid-soft),transparent 70%)}
+.btile.lv-warn{border-left-color:var(--warn);background:linear-gradient(90deg,var(--warn-soft),transparent 70%)}
+.btile.lv-bad{border-left-color:var(--bad);background:linear-gradient(90deg,var(--bad-soft),transparent 70%)}
+.btile .btn-n{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.btile .btv b{font-size:26px;font-family:var(--f-display,inherit);color:var(--ink)}.btile .btv span{margin-left:4px;color:var(--muted);font-size:13px}
+.btile.lv-ok .btv b{color:var(--ok)}.btile.lv-mid .btv b{color:var(--mid)}.btile.lv-warn .btv b{color:var(--warn)}.btile.lv-bad .btv b{color:var(--bad)}
+.btile.k-somato .btv b{font-size:20px}
+.btile .btf{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+@media (max-width:560px){.bgrid{grid-template-columns:1fr 1fr;gap:8px}.btile{padding:10px 11px;border-left-width:5px}.btile .btv b{font-size:22px}.btile.k-somato{grid-column:1/-1}.btile .btf .note{font-size:11px}}
+</style>
+<style>
 /* additions v3: editing, photos, categories, modal */
 .av{overflow:hidden}
 .av img{width:100%;height:100%;object-fit:cover;display:block}
@@ -1197,6 +1211,7 @@ function alertsOf(a){
   TESTS.forEach(t=>{ const e=latestEval(a,t); if(e&&e.cls!=='ok') out.push({c:e.cls, src:'Fisioteràpia', t:`${t.n}: ${t.kind==='diff'?'diferència':'asimetria'} ${e.label}, cama ${e.weak} més feble (${fmtS(e.s)})`}); });
   (pfRows(a)||[]).filter(r=>r.cls==='bad').forEach(r=>out.push({c:'warn', src:'Preparació física', t:`${r.t.n}: ${pfFmt(r.t,r.raw)} ${r.t.u}, en zona de dèficit (${fmtS(r.s)})`}));
   TESTS.forEach(t=>{ const e=latestEval(a,t), tg=target(a,t.k); if(e&&tg&&!tg.missingWeight&&tlevel((e.R+e.L)/2,tg)==='bad') out.push({c:'warn', src:'Fisioteràpia · objectius', t:`${t.n}: mitjana ${fx((e.R+e.L)/2,t.d)} ${t.u}, per sota de l’esperat per a ${ageGroup(a)} (${fx(tg.th[0],t.d)})`}); });
+  bodyEval(a).filter(x=>x.cls==='bad').forEach(x=>out.push({c:'bad', src:'Dades corporals', t:`${x.n}: ${x.txt.replace(/<[^>]*>/g,'')}${x.u?' '+x.u:''}, en zona de dèficit (excel·lent: ${x.ref})`}));
   if(a.field.some(s=>!s.m)) out.push({c:'warn', src:'Dades', t:'Hi ha una sessió de salts sense data. Edita-la per posar-hi la data.'});
   if(!a.cat) out.push({c:'warn', src:'Perfil', t:'Encara no té categoria assignada.'});
   return out.sort((x,y)=>RANK[x.c]-RANK[y.c]);
@@ -1733,10 +1748,11 @@ function heroAthlete(a){
 }
 function resumAthlete(a){
   const al=alertsOf(a), {f,d}=lastDate(a), rows=pfRows(a), lastNote=a.notes.slice().sort((x,y)=>(y.m||'').localeCompare(x.m||''))[0];
-  return `${benResum(a)}${targetsPanel(a)}<div class="grid2">
+  return `${benResum(a)}<div class="grid2">
    <div class="panel"><div class="panel-h"><div><h2>Preparació física ${a.pfDemo?DEMO:''}</h2><div class="note">${rows?`% respecte a la zona «Bé» (${refLabel(a,'fisic')})`:'Sense tests físics registrats'}</div></div><button class="btn ghost sm" data-a="sub" data-v="fisic">Veure secció</button></div>${radar(a)}</div>
    <div class="panel"><div class="panel-h"><div><h2>Fisioteràpia</h2><div class="note">Simetria entre cames de cada test</div></div><button class="btn ghost sm" data-a="sub" data-v="fisio">Veure secció</button></div>${fisioRadarAth(a,true)}</div>
   </div>
+  ${bodyPanel(a,true)}${targetsPanel(a)}
   <div class="panel"><div class="panel-h"><h2>Què cal mirar</h2><span class="pill ${al.some(x=>x.c==='bad')?'bad':(al.length?'warn':'ok')}">${al.length} avisos</span></div>
     <div class="alist">${al.map(x=>`<div class="al"><span class="dt ${x.c}"></span><span><span class="src">${x.src}</span>${esc(x.t)}</span></div>`).join('')||'<div class="al"><span class="dt ok"></span>Cap avís actiu.</div>'}</div></div>`;
 }
@@ -1789,12 +1805,30 @@ function pfResultsTable(a, rows, clickable){
     return `<tr class="grp"><td colspan="6">${l}</td></tr>`+rs.map(r=>`<tr${clickable?` class="click" data-a="pfk" data-v="${r.t.k}"`:''}><td><b>${r.t.n}</b> <span class="note">${r.t.u}</span></td><td class="num"><b class="lvv lv-${r.tg?r.cls:'na'}">${pfFmt(r.t,r.raw)}</b><span class="sub2">${esc(fmtS(r.s))}</span></td><td class="num">${r.praw==null?'–':pfFmt(r.t,r.praw)}${r.ps?`<span class="sub2">${esc(fmtS(r.ps))}</span>`:''}</td><td>${r.ch==null?'<span class="note">–</span>':dchip(r.ch,1,r.chU)}</td><td class="num">${fx(r.best,r.t.d)}</td><td>${r.tg?tgPill(r.cls,r.tg):'<span class="note">–</span>'}</td></tr>`).join(''); }).join('');
   return `<div class="tw"><table class="pft"><thead><tr><th>Test</th><th class="num">Últim</th><th class="num">Anterior</th><th>Millora</th><th class="num">Millor</th><th>Nivell</th></tr></thead><tbody>${body}</tbody></table></div>`;
 }
-function bodyPanel(a){
-  const b=a.body||{}, imc = b.imc ?? (a.alt&&a.pes ? a.pes/((a.alt/100)**2) : null);
-  const ref = a.sex==='F' ? {imc:'22,5–25,5', fat:'13–16 %', muscle:'> 49 %'} : {imc:'24–26,5', fat:'8–11 %', muscle:'> 53 %'};
-  const row=(l,v,r)=>`<tr><td>${l}</td><td class="num"><b>${v}</b></td><td class="note">${r?'Excel·lent: '+r:''}</td></tr>`;
-  return `<div class="panel"><div class="panel-h"><div><h2>Dades corporals</h2><div class="note">Valors de la zonificació del preparador físic</div></div></div>
-    <div class="tw"><table class="bodyt"><tbody>${row('Alçada', a.alt?fx(a.alt,1)+' cm':'–')}${row('Pes', a.pes?fx(a.pes,1)+' kg':'–')}${row('IMC', imc?fx(imc,1)+' kg/m²':'–', ref.imc)}${row('Greix corporal', b.fat!=null?fx(b.fat,1)+' %':'–', ref.fat)}${row('Massa muscular', b.muscle!=null?fx(b.muscle,1)+' %':'–', ref.muscle)}${row('Somatotip', b.somato?esc(b.somato):'–', 'Meso > Endo > Ecto')}</tbody></table></div></div>`;
+/* Dades corporals: semàfor (Excel·lent = zona del preparador físic; la resta, bandes al voltant) */
+const BODY_REF = {
+  M:{imc:{ok:[24,26.5], mid:[22.5,28], warn:[21,30]}, fat:{ok:[8,11], mid:[6,13], warn:[5,16]}, muscle:{ok:53, mid:50, warn:47}},
+  F:{imc:{ok:[22.5,25.5], mid:[21,27], warn:[19.5,29]}, fat:{ok:[13,16], mid:[11,19], warn:[9,23]}, muscle:{ok:49, mid:46, warn:43}} };
+const inR = (v,r) => v>=r[0] && v<=r[1];
+const bandLv = (v,R) => v==null?'na': inR(v,R.ok)?'ok': inR(v,R.mid)?'mid': inR(v,R.warn)?'warn':'bad';
+const minLv = (v,R) => v==null?'na': v>=R.ok?'ok': v>=R.mid?'mid': v>=R.warn?'warn':'bad';
+function somatoLv(t){ if(!t) return 'na'; const p=String(t).split('>').map(x=>x.trim().toLowerCase().slice(0,4));
+  if(p[0]==='meso') return p[1]==='endo'?'ok':'mid'; if(p[1]==='meso') return 'warn'; return 'bad'; }
+const BODY_LV = {ok:'Excel·lent', mid:'Bé', warn:'Millorable', bad:'Dèficit', na:'Sense dada'};
+function bodyEval(a){
+  const b=a.body||{}, R=BODY_REF[a.sex==='F'?'F':'M'], imc = b.imc ?? (a.alt&&a.pes ? a.pes/((a.alt/100)**2) : null);
+  const rg = r => `${fx(r[0],1)}–${fx(r[1],1)}`;
+  return [
+    {k:'imc', n:'IMC', v:imc, txt:imc!=null?fx(imc,1):'–', u:'kg/m²', cls:bandLv(imc,R.imc), ref:rg(R.imc.ok)},
+    {k:'fat', n:'Greix corporal', v:b.fat, txt:b.fat!=null?fx(b.fat,1):'–', u:'%', cls:bandLv(b.fat,R.fat), ref:rg(R.fat.ok)+' %'},
+    {k:'muscle', n:'Massa muscular', v:b.muscle, txt:b.muscle!=null?fx(b.muscle,1):'–', u:'%', cls:minLv(b.muscle,R.muscle), ref:'> '+fx(R.muscle.ok,0)+' %'},
+    {k:'somato', n:'Somatotip', v:b.somato, txt:b.somato?esc(b.somato).replace(/ &gt; /g,' › '):'–', u:'', cls:somatoLv(b.somato), ref:'Meso › Endo › Ecto'} ];
+}
+function bodyPanel(a, compact){
+  const ev=bodyEval(a), has=ev.some(x=>x.cls!=='na'), worstB=['bad','warn','mid','ok'].find(c=>ev.some(x=>x.cls===c));
+  const tiles=ev.map(x=>`<div class="btile lv-${x.cls} k-${x.k}"><div class="btn-n">${x.n}</div><div class="btv"><b>${x.txt}</b>${x.u&&x.v!=null?`<span>${x.u}</span>`:''}</div><div class="btf"><span class="pill ${x.cls}">${BODY_LV[x.cls]}</span><span class="note">Excel·lent: ${x.ref}</span></div></div>`).join('');
+  return `<div class="panel"><div class="panel-h"><div><h2>Dades corporals</h2><div class="note">${compact?'Composició corporal respecte a la zona del preparador físic':`Alçada ${a.alt?fx(a.alt,1)+' cm':'–'} · Pes ${a.pes?fx(a.pes,1)+' kg':'–'}`}</div></div>${compact?`<button class="btn ghost sm" data-a="sub" data-v="fisic">Veure secció</button>`:(has&&worstB?`<span class="pill ${worstB}">${worstB==='ok'?'Tot excel·lent':worstB==='bad'?'Hi ha dèficit':BODY_LV[worstB]}</span>`:'')}</div>
+    ${has?`<div class="bgrid">${tiles}</div>`:'<p class="empty-t">Encara no hi ha dades corporals.</p>'}</div>`;
 }
 function fisicAthlete(a){
   const ed=editable(), rows=pfRows(a);
@@ -1802,11 +1836,11 @@ function fisicAthlete(a){
   const avail=PF.filter(x=>pfSeries(a,x.k).length);
   const t=PF.find(x=>x.k===S.pfk && pfSeries(a,x.k).length) || avail.find(x=>x.k==='cmj') || avail[0];
   const sess=a.pf.map((b,i)=>({b,i})).reverse();
-  return `${pfRadarAth(a)}${pfEvoPanel(a)}
+  return `${pfRadarAth(a)}${bodyPanel(a)}${pfEvoPanel(a)}
   ${targetsPanel(a,'fisic')}
   <div class="grid2">
    <div class="panel"><div class="panel-h"><h2>Últim resultat de cada test</h2><span class="note">Clica una fila per veure’n l’evolució</span></div>${pfResultsTable(a,rows,true)}</div>
-   <div style="display:flex;flex-direction:column;gap:16px;min-width:0"><div class="panel"><div class="panel-h"><div><h2>Perfil</h2><div class="note">% respecte a l’inici de la zona «Bé». La línia verda discontínua és el 100 %.</div></div></div>${radar(a)}</div>${bodyPanel(a)}</div>
+   <div style="display:flex;flex-direction:column;gap:16px;min-width:0"><div class="panel"><div class="panel-h"><div><h2>Perfil</h2><div class="note">% respecte a l’inici de la zona «Bé». La línia verda discontínua és el 100 %.</div></div></div>${radar(a)}</div></div>
   </div>
   <div class="panel"><div class="panel-h"><div><h2>Sessions de tests físics</h2><div class="note">${a.pf.length} sessions</div></div>${ed?`<button class="btn sm" data-a="newbat">${ICO.plus}Nova sessió</button>`:''}</div>
    <div class="tw"><table><thead><tr><th>Data</th><th>Lloc</th><th>Tests</th>${ed?'<th></th>':''}</tr></thead><tbody>${sess.map(({b,i})=>`<tr><td class="mono" style="white-space:nowrap">${esc(fmtS(b))}</td><td>${esc(b.place||'–')}</td><td><div class="chips">${PF.filter(x=>pfHas(b.v[x.k])).map(x=>`<span class="tag">${esc(x.n.replace(' · 1RM relatiu',' 1RM').replace(' · potència màxima',' potència'))} ${pfFmt(x,b.v[x.k])}</span>`).join('')}</div></td>${ed?`<td style="text-align:right"><button class="btn ghost sm" data-a="editbat" data-v="${i}">${ICO.edit}Editar</button></td>`:''}</tr>`).join('')}</tbody></table></div></div>`;
