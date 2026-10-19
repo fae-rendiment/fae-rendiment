@@ -1640,7 +1640,7 @@ function vUsuaris(){
    ${USERS&&USERS.length?`<div class="tw"><table class="utab"><thead><tr><th>Persona</th><th>Accés</th><th>Veu</th><th>Estat</th><th></th></tr></thead><tbody>${USERS.map(row).join('')}</tbody></table></div>`:'<p class="empty-t">Encara no hi ha usuaris.</p>'}</div>
   ${importPanel()}`;
 }
-function importPanel(){ return `<div class="panel imp-panel"><div class="panel-h"><div><h2>Importar dades</h2><div class="note">Per passar les dades de la plataforma antiga. Tria el fitxer <b>fae-dades-importar.json</b>.</div></div></div>
+function importPanel(){ return `<div class="panel imp-panel"><div class="panel-h"><div><h2>Importar dades</h2><div class="note">Per carregar un fitxer JSON preparat per Claude (dades o fotos dels corredors).</div></div></div>
    <label class="btn" style="display:inline-flex;cursor:pointer">Triar el fitxer i importar<input type="file" id="impFile" accept="application/json,.json" style="display:none"></label>${S.imp?`<p class="note" style="margin-top:10px"><b>${esc(S.imp)}</b></p>`:''}</div>`; }
 async function unCreate(){
   const N=S.un; N.err=null; N.ok=null;
@@ -3804,10 +3804,11 @@ window.FAE_ADMIN = {
     (json.config || []).forEach(c => ops.push(['config', c.id, c.data]));
     (json.informes || []).forEach(i => ops.push(['informes', i.id, { ...i.data, eq: eqOf[i.data.aid] || '' }]));
     (json.fotos || []).forEach(f => ops.push(['fotos', f.id, { d: f.d, at: new Date().toISOString() }]));
+    (json.athletePhotos || []).forEach(x => ops.push(['athletes', x.aid, { photo: x.id }, true]));   // només canvia la foto del corredor
     let done = 0;
     for (let i = 0; i < ops.length; i += 20) {
       const b = writeBatch(fs);
-      ops.slice(i, i + 20).forEach(([c, id, d]) => b.set(doc(fs, c, id), enc(d)));
+      ops.slice(i, i + 20).forEach(([c, id, d, merge]) => merge ? b.set(doc(fs, c, id), enc(d), { merge: true }) : b.set(doc(fs, c, id), enc(d)));
       await b.commit(); done += Math.min(20, ops.length - i); onProgress && onProgress(done, ops.length);
     }
     return ops.length;
