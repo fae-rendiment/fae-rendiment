@@ -1629,7 +1629,7 @@ function vUsuaris(){
     return `<tr class="${off?'u-off':''}"><td><b>${esc(u.name||'(sense nom)')}</b></td>
       <td><span class="tag">${ROLE_L[u.role]||u.role}</span></td>
       <td>${u.role==='coach'?esc(u.eq||'—'):u.role==='athlete'?esc(athName(u.aid)):'<span class="note">Tot</span>'}</td>
-      <td><code class="ucode">${esc(FAE_FMT(u.code))}</code> <button class="btn link sm" data-a="ueCopy" data-v="${esc(u.uid)}">Copiar</button></td>
+      <td><code class="ucode">${esc(FAE_FMT(u.code))}</code> <button class="btn link sm" data-a="ueCopy" data-v="${esc(u.uid)}">Copiar</button><a class="btn link sm" href="https://wa.me/?text=${encodeURIComponent(shareTxt(u))}" target="_blank" rel="noopener">WhatsApp</a></td>
       <td>${off?'<span class="pill bad">Desactivat</span>':'<span class="pill ok">Actiu</span>'}</td>
       <td style="text-align:right;white-space:nowrap">${me?'<span class="note">Tu</span>':`<button class="btn link sm" data-a="ueEdit" data-v="${esc(u.uid)}">Editar</button><button class="btn link sm" data-a="ueToggle" data-v="${esc(u.uid)}" style="color:var(--${off?'ok':'bad'})">${off?'Reactivar':'Desactivar'}</button>`}</td></tr>`; };
   const made=N.made?(USERS||[]).find(u=>u.uid===N.made):null;
@@ -1644,7 +1644,8 @@ function vUsuaris(){
    ${N.err?`<p class="err">${esc(N.err)}</p>`:''}
    <div class="row" style="margin-top:12px"><button class="btn" data-a="unCreate" ${N.busy?'disabled':''}>${N.busy?'Creant…':'Crear el codi'}</button></div>
    ${made?`<div class="newcode"><div><span class="note">Codi de ${esc(made.name||'')}</span><b>${esc(FAE_FMT(made.code))}</b></div><div class="row"><button class="btn sm" data-a="ueCopy" data-v="${esc(made.uid)}">Copiar missatge</button><a class="btn ghost sm" href="https://wa.me/?text=${encodeURIComponent(shareTxt(made))}" target="_blank" rel="noopener">Enviar per WhatsApp</a></div></div>`:''}</div>
-  <div class="panel"><div class="panel-h"><div><h2>Codis creats</h2><div class="note">${USERS?USERS.length+' codis':'Carregant…'}</div></div></div>
+  ${bulkPanel(groups, aths)}
+  <div class="panel"><div class="panel-h"><div><h2>Codis creats</h2><div class="note">${USERS?USERS.length+' codis':'Carregant…'}</div></div>${USERS&&USERS.length?`<button class="btn ghost sm" data-a="codesCsv">Descarregar la llista</button>`:''}</div>
    ${USERS&&USERS.length?`<div class="tw"><table class="utab"><thead><tr><th>Persona</th><th>Accés</th><th>Veu</th><th>Codi</th><th>Estat</th><th></th></tr></thead><tbody>${USERS.map(row).join('')}</tbody></table></div>`:'<p class="empty-t">Encara no hi ha codis.</p>'}</div>
   ${formsPanel()}${importPanel()}`;
 }
@@ -1729,6 +1730,39 @@ function formsPanel(){ const F=S.fm||(S.fm={...FORMS});
 async function formsSave(){ const F=S.fm||{}; const out={}; FORM_DEFS.forEach(([k])=>{ out[k]=(F[k]||'').trim(); });
   if(Object.values(out).some(u=>u && !/^https:\/\//.test(u))){ toast('L’enllaç ha de començar per https://'); return; }
   try{ await DB.doc('config/forms').set(out); FORMS=out; toast('Enllaços desats'); }catch(_){ toast('No s’han pogut desar.'); } renderMain(); }
+
+/* ---------- Crear codis de cop per a tots els corredors i grups ---------- */
+function bulkTodo(groups, aths){
+  const L=USERS||[], act=u=>u.active!==false;
+  const ath=aths.filter(a=>!L.some(u=>act(u)&&u.role==='athlete'&&u.aid===a.id));
+  const grp=groups.filter(g=>!L.some(u=>act(u)&&u.role==='coach'&&u.eq===g));
+  return {ath, grp};
+}
+function bulkPanel(groups, aths){
+  if(!USERS) return '';
+  const {ath, grp}=bulkTodo(groups, aths), B=S.bulk;
+  if(!ath.length && !grp.length && !B) return '';
+  return `<div class="panel"><div class="panel-h"><div><h2>Crear tots els codis de cop</h2><div class="note">Un codi per a cada corredor actiu (amb el seu nom) i un per a cada grup (amb el nom del grup, per als entrenadors). Només es creen els que encara no en tenen.</div></div></div>
+   ${B&&B.busy?`<p class="note"><b>Creant… ${B.n} de ${B.tot}</b></p>`:B&&B.done!=null?`<p class="note" style="color:var(--ok)"><b>Fet: ${B.done} codis creats.</b> Ja els tens a la llista de sota; descarrega-la o envia’ls un per un per WhatsApp.</p>`:''}
+   ${ath.length||grp.length?`<p>Falten <b>${ath.length}</b> corredors i <b>${grp.length}</b> grups.</p><div class="row"><button class="btn" data-a="bulkCreate" ${B&&B.busy?'disabled':''}>Crear ${ath.length+grp.length} codis</button></div>`:''}</div>`;
+}
+async function bulkCreate(){
+  const groups=groupsList().filter(g=>g!==NOGRP&&g!==ARCHG), aths=ATH.filter(a=>a.active);
+  const {ath, grp}=bulkTodo(groups, aths), jobs=[...grp.map(g=>({name:g, role:'coach', eq:g})), ...ath.map(a=>({name:a.name, role:'athlete', aid:a.id}))];
+  if(!jobs.length) return;
+  S.bulk={busy:true, n:0, tot:jobs.length}; renderMain();
+  let ok=0;
+  for(const j of jobs){ try{ await FAE_ADMIN.create(j); ok++; }catch(e){ console.error(e); } S.bulk.n++; renderSoon(); }
+  S.bulk={busy:false, done:ok}; renderMain();
+}
+function codesCsv(){
+  const athName=id=>(byId(id)||{}).name||'';
+  const rows=[['Nom','Tipus d’accés','Grup / corredor','Codi','Estat','Missatge per enviar']].concat((USERS||[]).map(u=>[u.name||'', ROLE_L[u.role]||u.role, u.role==='coach'?(u.eq||''):u.role==='athlete'?athName(u.aid):'Tot', FAE_FMT(u.code), u.active===false?'Desactivat':'Actiu', shareTxt(u).replace(/\n/g,' ')]));
+  const csv='﻿'+rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';')).join('\r\n');
+  const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})), l=document.createElement('a');
+  l.href=url; l.download='codis-acces-FAE.csv'; document.body.appendChild(l); l.click(); l.remove(); setTimeout(()=>URL.revokeObjectURL(url),4000);
+  toast('Llista descarregada (s’obre amb Excel o Numbers)');
+}
 
 /* ---------- views: global ---------- */
 function eqCard(a){
@@ -3526,6 +3560,8 @@ document.addEventListener('click', async e=>{
   else if(a==='ueCancel'){ S.ue=null; }
   else if(a==='ueSave'){ const E=S.ue; if(E){ try{ await FAE_ADMIN.update(E.uid,{role:E.role, eq:E.role==='coach'?E.eq:'', aid:E.role==='athlete'?E.aid:''}); toast('Usuari desat'); S.ue=null; }catch(_){ toast('No s’ha pogut desar.'); } } }
   else if(a==='ueCopy'){ copyCode(v); return; }
+  else if(a==='bulkCreate'){ bulkCreate(); return; }
+  else if(a==='codesCsv'){ codesCsv(); return; }
   else if(a==='ueDel'){ if(confirm('Esborrar aquest codi? La persona ja no podrà entrar.')){ try{ await FAE_ADMIN.remove(v); S.ue=null; toast('Codi esborrat'); }catch(_){ toast('No s’ha pogut esborrar.'); } } }
   else if(a==='ueToggle'){ const u=(USERS||[]).find(x=>x.uid===v); if(u){ try{ await FAE_ADMIN.update(u.uid,{active:u.active===false}); toast(u.active===false?'Accés restablert':'Accés tret'); }catch(_){ toast('No s’ha pogut canviar.'); } } return; }
   else if(a==='grEdit'){ if(editable()) { grOpen(); window.scrollTo(0,0); } }
