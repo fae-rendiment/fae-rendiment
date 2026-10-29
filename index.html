@@ -281,6 +281,18 @@ window.claude = { use: async n => (await window.FAE_READY).cap(n) };
 </div>
 
 <style>
+.recs.recgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.recs.recgrid>li{display:block;border:1px solid var(--line);border-radius:12px;padding:12px 12px 12px 44px;position:relative;background:#fff;break-inside:avoid}
+.recs.recgrid>li::before{position:absolute;left:12px;top:12px}
+.recs.recgrid .rp{display:block;font-size:12.5px;line-height:1.4;color:var(--muted);margin-top:2px}
+.recs.recgrid .exgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:8px}
+.recs.recgrid .excard{padding:4px 4px 6px;gap:3px}
+.recs.recgrid .excard svg{max-height:74px;width:100%}
+.recs.recgrid .excard figcaption{font-size:10.5px;line-height:1.25;padding:0 2px}
+.recs.recgrid .excard figcaption b{font-size:11px}
+@media (max-width:640px){.recs.recgrid{grid-template-columns:1fr}}
+</style>
+<style>
 .bgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
 .btile{border:1px solid var(--line);border-left:6px solid var(--muted);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;background:var(--card,#fff)}
 .btile.lv-ok{border-left-color:var(--ok);background:linear-gradient(90deg,var(--ok-soft),transparent 70%)}
@@ -702,7 +714,7 @@ table.wut th,table.wut td{text-align:center} table.wut th:first-child,table.wut 
 .lg-z.warn{background:var(--warn-soft);border:1px solid #f3d3a5}
 .pfgchips{margin:2px 0 8px}.pftchips{margin:0 0 12px}
 .uchip{display:inline-flex;flex-direction:column;line-height:1.15;text-align:right;margin-left:8px}.uchip b{font-size:13px}.uchip .note{font-size:11px}
-.utab .u-off td{opacity:.55}.fwk{border-left:6px solid var(--muted)}.fwk.fw-ok{border-left-color:var(--ok);background:linear-gradient(90deg,var(--ok-soft),transparent 60%)}.fwk.fw-warn{border-left-color:var(--warn)}.fwk.fw-bad{border-left-color:var(--bad);background:linear-gradient(90deg,var(--bad-soft),transparent 60%)}.fw-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.fw-row:first-of-type{border-top:0}.fw-ic{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:700;flex:none;color:#fff;background:var(--muted)}.fw-ok .fw-ic{background:var(--ok)}.fw-warn .fw-ic{background:var(--warn)}.fw-bad .fw-ic{background:var(--bad)}.fw-t{flex:1;min-width:0;display:flex;flex-direction:column}.fw-go-bad{background:var(--bad)!important;border-color:var(--bad)!important;color:#fff!important}.ucode{font-family:ui-monospace,Menlo,monospace;font-size:13px;letter-spacing:.06em;background:var(--bg,#f4f6f9);padding:2px 6px;border-radius:6px}.newcode{margin-top:14px;padding:14px 16px;border:1px dashed var(--ok);border-radius:12px;background:var(--ok-soft);display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}.newcode b{display:block;font-family:ui-monospace,Menlo,monospace;font-size:28px;letter-spacing:.12em;color:var(--ink)}.unew{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.utab .u-off td{opacity:.55}.gra.gra-ok{background:linear-gradient(100deg,var(--ok-soft) 0%,var(--surface) 85%);border-color:color-mix(in srgb,var(--ok) 35%,var(--line))}.gra.gra-warn{background:linear-gradient(100deg,var(--warn-soft) 0%,var(--surface) 85%);border-color:color-mix(in srgb,var(--warn) 40%,var(--line))}.gra.gra-bad{background:linear-gradient(100deg,var(--bad-soft) 0%,var(--surface) 85%);border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}.grleg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--muted);margin:-4px 0 4px}.grleg i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:6px;vertical-align:-2px}.gl-ok{background:var(--ok)}.gl-warn{background:var(--warn)}.gl-bad{background:var(--bad)}.lesbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 16px;border:1px solid color-mix(in srgb,var(--bad) 35%,var(--line));border-radius:12px;background:linear-gradient(100deg,var(--bad-soft),var(--surface) 70%)}.lesbar b{font-size:15px}.lesbar .sel{min-width:220px}.lesbar .note{flex-basis:100%;margin:0}.fwk{border-left:6px solid var(--muted)}.fwk.fw-ok{border-left-color:var(--ok);background:linear-gradient(90deg,var(--ok-soft),transparent 60%)}.fwk.fw-warn{border-left-color:var(--warn)}.fwk.fw-bad{border-left-color:var(--bad);background:linear-gradient(90deg,var(--bad-soft),transparent 60%)}.fw-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.fw-row:first-of-type{border-top:0}.fw-ic{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:700;flex:none;color:#fff;background:var(--muted)}.fw-ok .fw-ic{background:var(--ok)}.fw-warn .fw-ic{background:var(--warn)}.fw-bad .fw-ic{background:var(--bad)}.fw-t{flex:1;min-width:0;display:flex;flex-direction:column}.fw-go-bad{background:var(--bad)!important;border-color:var(--bad)!important;color:#fff!important}.ucode{font-family:ui-monospace,Menlo,monospace;font-size:13px;letter-spacing:.06em;background:var(--bg,#f4f6f9);padding:2px 6px;border-radius:6px}.newcode{margin-top:14px;padding:14px 16px;border:1px dashed var(--ok);border-radius:12px;background:var(--ok-soft);display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}.newcode b{display:block;font-family:ui-monospace,Menlo,monospace;font-size:28px;letter-spacing:.12em;color:var(--ink)}.unew{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
 .lg-c{background:rgba(154,63,180,.12);border:2px solid var(--esq)}
 .rep-pub{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
 .rep-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
@@ -1719,7 +1731,7 @@ function formsWeek(a){
     : (me?'Tens formularis per respondre aquesta setmana':'Formularis pendents d’aquesta setmana');
   return `<div class="panel fwk fw-${all?'ok':late?'bad':'warn'}"><div class="panel-h"><div><h2>${head}</h2><div class="note">Les respostes poden trigar fins a una hora a aparèixer aquí.</div></div></div>${fs.map(row).join('')}</div>`;
 }
-function formUrl(k, a){ const u=(FORMS[k]||'').trim(); if(!/^https:\/\//.test(u)) return ''; return a ? u.replace(/=NOM(?=&|#|$)/g, '='+encodeURIComponent(a.name||'')) : u; }
+function formUrl(k, a){ const u=(FORMS[k]||'').trim(); if(!/^https:\/\//.test(u)) return ''; return a ? u.replace(/=NOM(?=&|#|$)/g, '='+encodeURIComponent(formName(a))) : u; }
 function lesioBtn(a){ if(S.mode!=='staff' || (window.FAE_USER||{}).role==='athlete') return '';
   const u=formUrl('lesio',a); if(u) return `<a class="btn ghost lesio-btn" href="${esc(u)}" target="_blank" rel="noopener">🩹 Fitxa de lesió</a>`;
   return editable()?`<button class="btn ghost" data-a="tab" data-v="usuaris" title="Encara no hi ha enllaç">🩹 Configurar fitxa de lesió</button>`:''; }
@@ -1762,6 +1774,17 @@ function codesCsv(){
   const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})), l=document.createElement('a');
   l.href=url; l.download='codis-acces-FAE.csv'; document.body.appendChild(l); l.click(); l.remove(); setTimeout(()=>URL.revokeObjectURL(url),4000);
   toast('Llista descarregada (s’obre amb Excel o Numbers)');
+}
+
+/* Barra de lesió a la vista del grup (equip tècnic i entrenadors) */
+function lesioBar(list){
+  if(S.mode!=='staff' || (window.FAE_USER||{}).role==='athlete' || !list.length) return '';
+  if(!formUrl('lesio')) return editable()?`<div class="lesbar"><b>🩹 Fitxa de lesió</b><button class="btn ghost sm" data-a="tab" data-v="usuaris">Configurar l’enllaç del formulari</button></div>`:'';
+  const sel=list.find(a=>a.id===S.lesA), href=sel?formUrl('lesio',sel):formUrl('lesio');
+  return `<div class="lesbar"><b>🩹 Hi ha hagut una lesió?</b>
+    <select class="sel" id="lesSel"><option value="">Tria el corredor…</option>${list.map(a=>`<option value="${esc(a.id)}" ${a.id===S.lesA?'selected':''}>${esc(a.name)}</option>`).join('')}</select>
+    <a class="btn fw-go-bad" href="${esc(href)}" target="_blank" rel="noopener">Omplir la fitxa de lesió</a>
+    <p class="note">S’obre el formulari de lesions${sel?' amb el nom de '+esc(sel.name)+' ja posat':''}. També el tens a la fitxa de cada corredor.</p></div>`;
 }
 
 /* ---------- views: global ---------- */
@@ -1881,7 +1904,7 @@ function fisioAthlete(a){
   return `${fisioRadarAth(a)}<div class="tcards">${cards}</div>
   ${agtLine(a)}
   ${nmPanel(a)}
-  ${wuPanel(a)}
+  ${wuEligible(a)?wuPanel(a):''}
   ${targetsPanel(a,'fisio')}
   <div class="panel"><div class="panel-h"><div><h2>Evolució · ${t.n}</h2><div class="note">${t.sub} · ${t.u} · ${ss.length} ${ss.length===1?'sessió':'sessions'}</div></div><div class="legs"><span><i class="ld"></i>Dreta</span><span><i class="le"></i>Esquerra</span><span><i class="z ok"></i>Objectiu</span><span><i class="z mid"></i>Esperat</span><span><i class="z bad"></i>Per sota</span></div></div>
    ${evoChart(a,t)}
@@ -2560,7 +2583,6 @@ function autoPlanFisio(done){
   const items = done.filter(x=>x.e.cls!=='ok').sort((x,y)=>RANK[x.e.cls]-RANK[y.e.cls])
     .map(x=>({h:`${x.t.n} · cama ${x.e.weak} (${x.e.label})`, p:REC[x.t.k].replace('{s}',x.e.weak), side:x.e.weak, ex:TEST_EX[x.t.k].slice()}));
   if(!items.length) items.push({h:'Manteniment', p:'Cap asimetria rellevant. Mantenir el treball de prevenció habitual i repetir la bateria a la propera finestra de tests.', side:null, ex:['bosu','nordic']});
-  else items.push({h:'Retest', p:'Repetir les proves marcades en 6–8 setmanes per comprovar la millora abans de la temporada de competició.', side:null, ex:[]});
   return items;
 }
 function autoPlanFisic(rows){
@@ -2572,10 +2594,10 @@ function autoPlanFisic(rows){
 function planBlock(a, key, auto){
   const saved = a.plans && a.plans[key], ed = editable();
   if(S.pe && S.pe.key===key && S.pe.aid===a.id && ed) return planEditor();
-  const items = saved ? saved.items : auto;
+  const items = (saved ? saved.items : auto).filter(it=>!/^retest/i.test(String(it.h||'').trim()));
   PLAN_CACHE[a.id+'#'+key] = items;
   return `<section><div class="plan-h"><h3>Què cal millorar</h3>${ed?`<div class="row noprint">${saved?`<span class="tag">Editat el ${fmtDay(saved.at)}</span><button class="btn link sm" data-a="peReset" data-v="${esc(key)}" data-aid="${esc(a.id)}">Tornar a la proposta automàtica</button>`:'<span class="note">Proposta automàtica</span>'}<button class="btn ghost sm" data-a="peEdit" data-v="${esc(key)}" data-aid="${esc(a.id)}">${ICO.edit}Editar millores</button></div>`:''}</div>
-   <ol class="recs">${items.map(it=>`<li><div><b>${esc(it.h)}</b><span class="rp">${esc(it.p)}</span>${(it.ex||[]).filter(k=>EX[k]).length?`<div class="exgrid">${it.ex.map(k=>exCard(k,it.side)).join('')}</div>`:''}</div></li>`).join('') || '<li><div><span class="rp">Sense millores definides.</span></div></li>'}</ol></section>`;
+   <ol class="recs recgrid">${items.map(it=>`<li><div><b>${esc(it.h)}</b><span class="rp">${esc(it.p)}</span>${(it.ex||[]).filter(k=>EX[k]).length?`<div class="exgrid">${it.ex.map(k=>exCard(k,it.side)).join('')}</div>`:''}</div></li>`).join('') || '<li><div><span class="rp">Sense millores definides.</span></div></li>'}</ol></section>`;
 }
 function planEditor(){
   const P=S.pe;
@@ -2631,7 +2653,7 @@ function reportDoc(a, fS, dS, inner){
    <section><h3>Control motor i salts</h3><div class="tw"><table>${thead}<tbody>${ev.filter(x=>x.t.src==='field').map(row).join('')}</tbody></table></div>${fS&&Number.isFinite(fS.agt)?`<p class="note" style="margin:8px 0 0">Agility T: <b class="lvv lv-${fS.agt<=AGT_REF(a)?'ok':'bad'}">${fx(fS.agt,2)} s</b> · objectiu &lt; ${fx(AGT_REF(a),1)} s</p>`:''}</section>
    <section><h3>Força isomètrica (dinamòmetre)</h3><div class="tw"><table>${thead}<tbody>${ev.filter(x=>x.t.src==='dyn').map(row).join('')}</tbody></table></div>${hq}</section>
    <section><h3>Variables neuromusculars · risc de lesió de genoll</h3>${nmPanel(a,true)}</section>
-   ${planBlock(a, planKey('fisio',a,fS,dS), autoPlanWarmup(a))}
+   ${planBlock(a, planKey('fisio',a,fS,dS), wuEligible(a)?autoPlanWarmup(a):autoPlanFisio(done))}
    ${obsSection('fisio|'+a.id+'|'+(fS?.m||'')+'|'+(dS?.m||''), 'repObs', 'Observacions del fisioterapeuta', 'Valoració clínica, context de lesions, pactes amb el corredor…', prevNotes, `<button class="btn ghost sm" data-a="saveobs" data-v="${esc(fS?.m||dS?.m||'')}">Desar a la fitxa del corredor</button>`)}`;
   return inner ? body : `<article class="doc" id="doc">${top}${body}${SIGN}</article>`;
 }
@@ -2711,7 +2733,7 @@ async function downloadPDF(){
     c.querySelectorAll('h3, .parth').forEach(h0=>{ const h=h0.parentNode.classList&&h0.parentNode.classList.contains('plan-h')?h0.parentNode:h0;
       /* a long numbered list right after a heading: move its first item next to the heading */
       const nx0=h.nextElementSibling;
-      if(nx0 && nx0.matches('ol.recs') && nx0.children.length>1 && nx0.getBoundingClientRect().height>260){ const ol=document.createElement('ol'); ol.className='recs'; ol.appendChild(nx0.firstElementChild); nx0.parentNode.insertBefore(ol,nx0); nx0.style.counterReset='r 1'; nx0.style.marginTop='12px'; }
+      if(nx0 && nx0.matches('ol.recs') && nx0.children.length>1 && nx0.getBoundingClientRect().height>260){ const ol=document.createElement('ol'); ol.className=nx0.className; ol.appendChild(nx0.firstElementChild); nx0.parentNode.insertBefore(ol,nx0); nx0.style.counterReset='r 1'; nx0.style.marginTop='12px'; }
       const box=document.createElement('div'); box.className='keep'; h.parentNode.insertBefore(box,h); box.appendChild(h); let n=box.nextElementSibling, hgt=0;
       while(n && hgt<170){ const r=n.getBoundingClientRect().height; if(hgt && hgt+r>320) break; const nx=n.nextElementSibling; box.appendChild(n); hgt+=r; n=nx; } });
     /* the footer never sits alone on the last page */
@@ -2808,6 +2830,7 @@ function wuBlocksHTML(a, opts={}){
     return `<div class="wub ${p?'':'off'}"><div class="wuh"><span class="wup p${p}">${PLUS(p)}</span><b>${l}</b>${side&&p?`<span class="note">· èmfasi ${sideTxt(side)}</span>`:''}</div>
       ${p?`<div class="exgrid">${ex.map(k=>exCard(k, b==='core'?null:side)).join('')}</div>`:'<p class="note" style="margin:0">No cal en aquest moment.</p>'}</div>`; }).join('');
 }
+const wuEligible = a => !!a && (/^U1\d$/i.test(String(a.cat||'').trim()) || /\bU1[69]\b/i.test(String(a.eq||'')));
 function wuPanel(a){
   const ed=editable(), E=S.wuEdit&&S.wuEdit.aid===a.id?S.wuEdit:null;
   if(E) return wuEditor(a,E);
@@ -2839,10 +2862,10 @@ async function wuSave(){
 }
 /* taula d’equip com la del document de warm-up */
 function vWarmupEquip(){
-  const ed=editable(), list=ATH.filter(passFilters);
+  const ed=editable(), list=ATH.filter(passFilters).filter(wuEligible);
   const groups=[...new Set(list.map(a=>mcL(a)))];
   const cell=(a,b)=>{ const p=wuPlan(a)[b]||0; return `<td class="wuc">${ed?`<button class="wucb p${p}" data-a="wuCycle" data-v="${esc(a.id)}|${b}" title="Canviar prioritat">${PLUS(p)}</button>`:`<span class="wup p${p}">${PLUS(p)}</span>`}</td>`; };
-  return `<div class="panel"><div class="panel-h"><div><h2>Warm-up de l’equip</h2><div class="note">Nombre d’exercicis de cada bloc per corredor: cada + és un exercici (4–5 en total). ${ed?'Clica una casella per canviar-la; es desa sola.':''} Els punts mostren les quatre variables neuromusculars: cames · isquio/quàdriceps · gluti mig · CORE.</div></div></div>
+  return `<div class="panel"><div class="panel-h"><div><h2>Warm-up de l’equip</h2><div class="note">Nombre d’exercicis de cada bloc per corredor: cada + és un exercici (4–5 en total). ${ed?'Clica una casella per canviar-la; es desa sola.':''} Els punts mostren les quatre variables neuromusculars: cames · isquio/quàdriceps · gluti mig · CORE. Només corredors U16 i U19.</div></div></div>
    ${groups.map(g=>{ const rows=list.filter(a=>mcL(a)===g); return `<h3 class="wugh">${esc(g)}</h3><div class="tw"><table class="wut"><thead><tr><th>Corredor</th><th>Variables</th>${WU_BLOCKS.map(([b,l])=>`<th>${l.replace('Força de ','').replace('Força d’','').replace('Pliometria i reacció','Plio')}</th>`).join('')}<th>Total</th><th></th></tr></thead><tbody>
      ${rows.map(a=>`<tr><td><div class="who" data-a="ath" data-v="${esc(a.id)}" data-sub="fisio" style="cursor:pointer">${avatar(a)}<div><b>${esc(a.name)}</b><div class="note">${a.wu&&a.wu.p?'pla del fisio':'proposta automàtica'}</div></div></div></td>
        <td><div class="nmdots">${nmVars(a).map(v=>`<i class="${v.lv==null?'na':NM_LV[v.lv].c}" title="${esc(v.n)}: ${v.lv==null?'no valorat':NM_LV[v.lv].l}"></i>`).join('')}</div></td>
@@ -2871,7 +2894,6 @@ function autoPlanWarmup(a){
   const items=WU_BLOCKS.filter(([b])=>P[b]>0).sort((x,y)=>P[y[0]]-P[x[0]]).map(([b,l])=>{ const side=b==='core'?null:wuSide(a,b);
     return {h:`${l} ${PLUS(P[b])}${side?' · cama '+side:''}`, p:why[b], side, ex:wuEx(a,b)}; });
   if(!items.length) items.push({h:'Manteniment', p:'Sense dèficits rellevants. Mantenir el warm-up general i repetir la bateria a la propera finestra de tests.', side:null, ex:['wq_lunge','wc_bird']});
-  else items.push({h:'Retest', p:'Repetir la bateria en 6–8 setmanes per comprovar l’evolució de les variables.', side:null, ex:[]});
   return items;
 }
 
@@ -3273,7 +3295,9 @@ function vGrups(){
   return `<div class="row" style="justify-content:space-between;align-items:flex-end"><div><div class="eyebrow">${TEAM_MODE()?'Àrea de rendiment · Equip':`L’equip · ${act} corredors actius`}</div><h1>${esc(G)}</h1><p class="sub">${cfg.coach?'Entrenador/a: <b>'+esc(cfg.coach)+'</b> · ':''}${list.length} corredors. ${G===NOGRP?'Corredors que encara no tenen grup d’entrenament: assigna’ls-el des del seu perfil.':G===ARCHG?'Corredors arxivats.':'Balanç del grup a partir dels formularis setmanals, l’estat de salut i els tests. Clica un corredor per veure’n el detall.'}</p></div>
    ${ed?`<div class="row"><button class="btn ghost" data-a="grEdit">${ICO.edit}Editar grups</button><button class="btn" data-a="newath">${ICO.plus}Nou corredor</button></div>`:''}</div>
   ${picker}${coach}
-  <div class="groster">${list.map(a=>{ const s=SALUT[a.id], gc=s&&s.estat&&s.estat.gen?genCls(s.estat.gen):'na'; return `<button class="gra" data-a="ath" data-v="${esc(a.id)}" data-sub="resum">${avatar(a)}<span class="gra-n">${esc(a.name)}</span><span class="pill ${worst(a)}" title="Fisioteràpia">${worst(a)==='bad'?'A corregir':worst(a)==='warn'?'Vigilar':worst(a)==='ok'?'Correcte':'Sense tests'}</span><span class="bmini lv-${gc}" style="margin:0" title="Estat de salut"></span></button>`; }).join('')||'<p class="note">Encara no hi ha cap corredor en aquest grup.</p>'}</div>
+  <div class="groster">${list.map(a=>{ const s=SALUT[a.id], gc=s&&s.estat&&s.estat.gen?genCls(s.estat.gen):'na'; return `<button class="gra gra-${gc}" data-a="ath" data-v="${esc(a.id)}" data-sub="resum" title="${esc(s&&s.estat&&s.estat.gen?genTxt(s.estat.gen):'Sense estat de salut')}">${avatar(a)}<span class="gra-n">${esc(a.name)}</span><span class="pill ${worst(a)}" title="Fisioteràpia">${worst(a)==='bad'?'A corregir':worst(a)==='warn'?'Vigilar':worst(a)==='ok'?'Correcte':'Sense tests'}</span><span class="bmini lv-${gc}" style="margin:0" title="Estat de salut"></span></button>`; }).join('')||'<p class="note">Encara no hi ha cap corredor en aquest grup.</p>'}</div>
+  ${list.length?`<div class="grleg"><span><i class="gl-ok"></i>Participació plena</span><span><i class="gl-warn"></i>Participació modificada</span><span><i class="gl-bad"></i>Baixa / sense participació</span></div>`:''}
+  ${lesioBar(list)}
   <div class="kpis">
     <div><div class="n">${list.length}</div><div class="l">Corredors</div></div>
     <div><div class="n"><span style="color:var(--ok)">${st.ok}</span><span style="color:var(--faint)"> · </span><span style="color:var(--warn)">${st.warn}</span><span style="color:var(--faint)"> · </span><span style="color:var(--bad)">${st.bad}</span></div><div class="l">Participació plena · modificada · baixa</div></div>
@@ -3357,7 +3381,7 @@ function vInforme(){
       <button data-a="rtype" data-v="fisio" aria-pressed="${isF}"><b>Fisioteràpia</b><span>Y-Balance, salts i dinamòmetre</span></button>
       <button data-a="rtype" data-v="fisic" aria-pressed="${S.repType==='fisic'}"><b>Preparació física</b><span>Bateria de tests i evolució</span></button>
       <button data-a="rtype" data-v="both" aria-pressed="${isB}"><b>Fisio + Físic</b><span>Els dos informes en un sol document</span></button>
-      <button data-a="rtype" data-v="wu" aria-pressed="${S.repType==='wu'}"><b>Fitxa de warm-up</b><span>Exercicis segons els dèficits</span></button>
+      ${wuEligible(a)?`<button data-a="rtype" data-v="wu" aria-pressed="${S.repType==='wu'}"><b>Fitxa de warm-up</b><span>Exercicis segons els dèficits</span></button>`:''}
     </div>
     ${needF?`<label for="repF">Sessió de salts i Y-Balance<select class="sel" id="repF">${a.field.length?a.field.map((s,i)=>`<option value="${i}" ${s===fS?'selected':''}>${esc(fmtS(s))}${s.m||s.day?'':' (data pendent)'}</option>`).join(''):'<option>Cap sessió</option>'}</select></label>
     <label for="repD">Sessió de dinamòmetre<select class="sel" id="repD">${a.dyn.length?a.dyn.map((s,i)=>`<option value="${i}" ${s===dS?'selected':''}>${esc(fmtS(s))}</option>`).join(''):'<option>Cap sessió</option>'}</select></label>`:''}
@@ -3365,7 +3389,7 @@ function vInforme(){
     <button class="btn ghost" data-a="copy">Copiar l’informe en text</button>
     <button class="btn" data-a="repPub" ${S.repBusy?'disabled':''} style="background:var(--ok);border-color:var(--ok)">${S.repBusy?'Publicant…':'Publicar per al corredor i l’entrenador'}</button>
     ${repPublishedPanel(a)}
-  </div><div style="min-width:0">${S.repType==='wu'?wuReportDoc(a):isB?fullReportDoc(a,fS,dS):isF?reportDoc(a,fS,dS):pfReportDoc(a)}</div></div>`;
+  </div><div style="min-width:0">${S.repType==='wu'&&wuEligible(a)?wuReportDoc(a):isB?fullReportDoc(a,fS,dS):isF?reportDoc(a,fS,dS):pfReportDoc(a)}</div></div>`;
 }
 
 /* ---------- modals ---------- */
@@ -3484,7 +3508,7 @@ function renderRole(){
   if(window.FAE_USER && FAE_USER.role==='athlete'){ S.mode='corredor'; S.me=FAE_USER.aid; if(!RUN_TABS.some(t=>t[0]===S.tab)) S.tab='perfil';
     setHTML($('#rolebar'), webUserChip()); setHTML($('#tabs'), RUN_TABS.map(([k,l])=>`<button role="tab" data-a="tab" data-v="${k}" aria-selected="${S.tab===k}">${l}</button>`).join('')); return; }
   if(TEAM_MODE()){ if(!TEAM_TABS.some(t=>t[0]===S.tab)) S.tab='grups'; S.mode='staff';
-    setHTML($('#rolebar'), `<span class="ro">${ICO.lock}${esc(SITE.team)}</span>${webUserChip()}`);
+    setHTML($('#rolebar'), `<span class="ro" title="Accés només de consulta">${ICO.lock}${esc(SITE.team)} · només lectura</span>${webUserChip()}`);
     setHTML($('#tabs'), TEAM_TABS.map(([k,l])=>`<button role="tab" data-a="tab" data-v="${k}" aria-selected="${S.tab===k}">${l}</button>`).join('')); return; }
   const opts = ATH.filter(a=>a.active).map(a=>`<option value="${esc(a.id)}" ${a.id===S.me?'selected':''}>${esc(a.name)}</option>`).join('');
   setHTML($('#rolebar'), `<span class="note">Veure com a</span><div class="seg" role="group" aria-label="Veure com a"><button data-a="mode" data-v="staff" aria-pressed="${S.mode==='staff'}">Equip tècnic</button><button data-a="mode" data-v="corredor" aria-pressed="${S.mode==='corredor'}">Corredor</button></div>
@@ -3685,6 +3709,7 @@ document.addEventListener('change', async e=>{
   if(id==='ueEq'&&S.ue){ S.ue.eq=t.value; return; }
   if(id==='ueAid'&&S.ue){ S.ue.aid=t.value; return; }
   if(id==='impFile'&&t.files&&t.files[0]){ importFile(t.files[0]); return; }
+  if(id==='lesSel'){ S.lesA=t.value; renderMain(); return; }
   if(id==='gCmp'){ S.gCmp=t.value||null; renderMain(); }
   if(id==='fCmp'){ S.fCmp=t.value||null; renderMain(); }
   if(id==='pCmp'){ S.pCmp=t.value||null; renderMain(); }
