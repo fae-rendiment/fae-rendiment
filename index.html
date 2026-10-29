@@ -702,7 +702,7 @@ table.wut th,table.wut td{text-align:center} table.wut th:first-child,table.wut 
 .lg-z.warn{background:var(--warn-soft);border:1px solid #f3d3a5}
 .pfgchips{margin:2px 0 8px}.pftchips{margin:0 0 12px}
 .uchip{display:inline-flex;flex-direction:column;line-height:1.15;text-align:right;margin-left:8px}.uchip b{font-size:13px}.uchip .note{font-size:11px}
-.utab .u-off td{opacity:.55}.ucode{font-family:ui-monospace,Menlo,monospace;font-size:13px;letter-spacing:.06em;background:var(--bg,#f4f6f9);padding:2px 6px;border-radius:6px}.newcode{margin-top:14px;padding:14px 16px;border:1px dashed var(--ok);border-radius:12px;background:var(--ok-soft);display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}.newcode b{display:block;font-family:ui-monospace,Menlo,monospace;font-size:28px;letter-spacing:.12em;color:var(--ink)}.unew{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.utab .u-off td{opacity:.55}.fwk{border-left:6px solid var(--muted)}.fwk.fw-ok{border-left-color:var(--ok);background:linear-gradient(90deg,var(--ok-soft),transparent 60%)}.fwk.fw-warn{border-left-color:var(--warn)}.fwk.fw-bad{border-left-color:var(--bad);background:linear-gradient(90deg,var(--bad-soft),transparent 60%)}.fw-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.fw-row:first-of-type{border-top:0}.fw-ic{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:700;flex:none;color:#fff;background:var(--muted)}.fw-ok .fw-ic{background:var(--ok)}.fw-warn .fw-ic{background:var(--warn)}.fw-bad .fw-ic{background:var(--bad)}.fw-t{flex:1;min-width:0;display:flex;flex-direction:column}.fw-go-bad{background:var(--bad)!important;border-color:var(--bad)!important;color:#fff!important}.ucode{font-family:ui-monospace,Menlo,monospace;font-size:13px;letter-spacing:.06em;background:var(--bg,#f4f6f9);padding:2px 6px;border-radius:6px}.newcode{margin-top:14px;padding:14px 16px;border:1px dashed var(--ok);border-radius:12px;background:var(--ok-soft);display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}.newcode b{display:block;font-family:ui-monospace,Menlo,monospace;font-size:28px;letter-spacing:.12em;color:var(--ink)}.unew{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
 .lg-c{background:rgba(154,63,180,.12);border:2px solid var(--esq)}
 .rep-pub{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
 .rep-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
@@ -1674,7 +1674,50 @@ function webUserChip(){ const u=window.FAE_USER; if(!u) return ''; return `<span
 
 /* ---------- Enllaços a formularis (fitxa de lesió…) ---------- */
 let FORMS = {};
-const FORM_DEFS = [['lesio','Fitxa i informe de lesió','La veuen l’equip tècnic i els entrenadors a la fitxa de cada corredor.']];
+const FORM_DEFS = [
+  ['monitor','Monitorització setmanal','Cada setmana. El veu el corredor a la seva pàgina.'],
+  ['quinz','Benestar i salut mental (quinzenal)','Cada dues setmanes, segons el calendari.'],
+  ['bat','Bateria completa de benestar i salut mental','3 cops a la temporada (substitueix el quinzenal).'],
+  ['lesio','Fitxa i informe de lesió','La veuen l’equip tècnic i els entrenadors a la fitxa de cada corredor.']];
+const FORM_DEFAULT = {monitor:'https://forms.gle/fcjUDRNHB5UcdRdy8', quinz:'https://forms.gle/7JF8KLegSohW3CvK9', bat:'https://forms.gle/5WQ4ynwhxbDPtes67'};
+/* Calendari 2026/2027 (document «Formularis de seguiment FAE»): finestres [inici, final] */
+const FW_MON = ['2026-06-29','2027-06-27'];
+const FW_QUINZ = [['2026-07-13','2026-07-26'],['2026-07-27','2026-08-09'],['2026-08-10','2026-08-23'],['2026-08-24','2026-09-06'],['2026-09-07','2026-09-20'],['2026-09-21','2026-10-04'],['2026-10-05','2026-10-18'],['2026-10-19','2026-11-01'],['2026-11-02','2026-11-15'],['2026-11-16','2026-11-29'],['2026-11-30','2026-12-13'],['2026-12-14','2026-12-27'],['2027-01-11','2027-01-24'],['2027-01-25','2027-02-07'],['2027-02-08','2027-02-21'],['2027-02-22','2027-03-07'],['2027-03-08','2027-03-21'],['2027-03-22','2027-04-04'],['2027-04-05','2027-04-18'],['2027-05-03','2027-05-16'],['2027-05-17','2027-05-30'],['2027-05-31','2027-06-13'],['2027-06-14','2027-06-27']];
+const FW_BAT = [['2026-06-29','2026-07-12'],['2026-12-28','2027-01-10'],['2027-04-19','2027-05-02']];
+const dLocal = d => new Date(d+'T12:00:00');
+const todayISO = () => { const t=new Date(); return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`; };
+const daysBetween = (a,b) => Math.round((dLocal(b)-dLocal(a))/864e5);
+const mondayOf = iso => { const d=dLocal(iso); const k=(d.getDay()+6)%7; d.setDate(d.getDate()-k); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+const fmtDM = iso => iso.slice(8,10)+'/'+iso.slice(5,7);
+function formRaw(k){ const u=(FORMS[k]||'').trim(); return /^https:\/\//.test(u) ? u : (FORM_DEFAULT[k]||''); }
+function formName(a){ const s=SALUT[a.id]; const t=s&&s.title?String(s.title).replace(/^FAE Espai Esportista\s*-\s*/i,'').trim():''; return t||a.name||''; }
+/* Formularis que toquen avui a aquest corredor, amb l'estat (respost / pendent / endarrerit) */
+function formsDue(a){
+  const s=SALUT[a.id], start=(s&&s.mon&&s.mon.start)||FW_MON[0], ind=(s&&s.mon&&s.mon.ind)||{}, t=todayISO(), out=[];
+  const has=(key,i)=>{ const w=(ind[key]||{}).w||[]; return w[i]!=null; };
+  const wk=iso=>Math.floor(daysBetween(start,iso)/7);
+  if(t>=FW_MON[0] && t<=FW_MON[1]){ const m=mondayOf(t), i=wk(m), end=new Date(dLocal(m).getTime()+6*864e5).toISOString().slice(0,10);
+    const done=['Rendiment','Salut','Fatiga','Descans','Organització'].some(k=>has(k,i));
+    out.push({k:'monitor', n:'Monitorització setmanal', from:m, to:end, done, left:daysBetween(t,end)}); }
+  const win=(list,k,n)=>{ const w=list.find(([f,e])=>t>=f&&t<=e); if(!w) return; const i=wk(w[0]);
+    out.push({k, n, from:w[0], to:w[1], done:has('Salut Mental',i)||has('Salut Mental',i+1), left:daysBetween(t,w[1])}); };
+  win(FW_BAT,'bat','Bateria completa de benestar i salut mental');
+  if(!out.some(f=>f.k==='bat')) win(FW_QUINZ,'quinz','Benestar i salut mental');
+  return out.map(f=>({...f, cls:f.done?'ok':(f.left<=3?'bad':'warn')}));
+}
+function formsWeek(a){
+  if(!a) return '';
+  const fs=formsDue(a); if(!fs.length) return '';
+  const me=(window.FAE_USER||{}).role==='athlete', all=fs.every(f=>f.done), late=fs.some(f=>f.cls==='bad');
+  const nm=formName(a);
+  const row=f=>{ const u=formRaw(f.k), href=u?u.replace(/=NOM(?=&|#|$)/g,'='+encodeURIComponent(nm)):'';
+    return `<div class="fw-row fw-${f.cls}"><span class="fw-ic">${f.done?'✓':f.cls==='bad'?'!':'•'}</span><div class="fw-t"><b>${esc(f.n)}</b><span class="note">${fmtDM(f.from)} – ${fmtDM(f.to)} · ${f.done?'Respost':f.left<=0?'Últim dia per respondre':`Queden ${f.left+1} dies`}</span></div>
+      ${f.done?'<span class="pill ok">Respost</span>':href?`<a class="btn sm ${f.cls==='bad'?'fw-go-bad':''}" href="${esc(href)}" target="_blank" rel="noopener">${me?'Omplir ara':'Obrir formulari'}</a>`:''}</div>`; };
+  const head = all ? (me?'Ja has respost tots els formularis d’aquesta setmana 👏':'Ha respost tots els formularis d’aquesta setmana')
+    : late ? (me?'Et falta respondre formularis d’aquesta setmana':'Li falten formularis per respondre aquesta setmana')
+    : (me?'Tens formularis per respondre aquesta setmana':'Formularis pendents d’aquesta setmana');
+  return `<div class="panel fwk fw-${all?'ok':late?'bad':'warn'}"><div class="panel-h"><div><h2>${head}</h2><div class="note">Les respostes poden trigar fins a una hora a aparèixer aquí.</div></div></div>${fs.map(row).join('')}</div>`;
+}
 function formUrl(k, a){ const u=(FORMS[k]||'').trim(); if(!/^https:\/\//.test(u)) return ''; return a ? u.replace(/=NOM(?=&|#|$)/g, '='+encodeURIComponent(a.name||'')) : u; }
 function lesioBtn(a){ if(S.mode!=='staff' || (window.FAE_USER||{}).role==='athlete') return '';
   const u=formUrl('lesio',a); if(u) return `<a class="btn ghost lesio-btn" href="${esc(u)}" target="_blank" rel="noopener">🩹 Fitxa de lesió</a>`;
@@ -1873,7 +1916,7 @@ function vCorredor(){
   const picker = S.mode==='staff' ? `<div class="picker" aria-label="Tria corredor">${ATH.filter(x=>x.active||x.id===a.id).map(x=>`<button data-a="ath" data-v="${esc(x.id)}" aria-pressed="${x.id===a.id}"><span class="d ${worst(x)}"></span>${esc(x.name)}</button>`).join('')}</div>` : '';
   const subs=[['resum','Resum global'],['fisio','Fisioteràpia'],['fisic','Preparació física'],['ben','Benestar'],['med','Àrea mèdica']];
   const body = S.sub==='fisio' ? fisioAthlete(a) : S.sub==='fisic' ? fisicAthlete(a) : S.sub==='ben' ? benestarAthlete(a) : S.sub==='med' ? medicaAthlete(a) : resumAthlete(a);
-  return `${picker}${heroAthlete(a)}
+  return `${picker}${heroAthlete(a)}${formsWeek(a)}
   <div class="subtabs">${subs.map(([k,l])=>`<button data-a="sub" data-v="${k}" aria-pressed="${S.sub===k}">${l}</button>`).join('')}</div>
   ${body}`;
 }
