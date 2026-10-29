@@ -3,11 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
-<meta name="referrer" content="no-referrer">
 <link rel="icon" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="FAE">
@@ -256,9 +255,12 @@ input.search{background:var(--surface);border:1px solid var(--line);border-radiu
 .lg-link{font:inherit;font-size:13px;background:none;border:0;color:var(--focus);cursor:pointer;align-self:center}
 .lg-msg{margin:0;font-size:13px;color:var(--muted);min-height:1em;text-align:center}.lg-msg.err{color:var(--bad)}
 [hidden]{display:none!important}
+.lg-info{margin:0 0 4px;font-size:13px;line-height:1.45;color:var(--muted)}
+.lg-card input.lg-code{font:inherit;font-size:24px;letter-spacing:.18em;text-align:center;text-transform:uppercase;padding:12px;border:1px solid var(--line);border-radius:10px;font-variant-numeric:tabular-nums}
+.lg-foot{margin:6px 0 0;font-size:12px;color:var(--muted);text-align:center;line-height:1.6}.lg-foot a{color:var(--focus)}
 </style>
 <script>
-window.FAE_CONFIG = {"firebase": {"apiKey": "AIzaSyCv4Obfgrxlquhs3VXhUs8cvu2iAAxndeg", "authDomain": "fae-rendiment.firebaseapp.com", "projectId": "fae-rendiment", "storageBucket": "fae-rendiment.firebasestorage.app", "messagingSenderId": "269028639751", "appId": "1:269028639751:web:7e29a40a3de3246b2816a2"}, "bootstrapEmail": "polferrer95@gmail.com"};
+window.FAE_CONFIG = {"supabase": {"url": "https://xqsssasnawjeeujrmeni.supabase.co", "key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhxc3NzYXNuYXdqZWV1anJtZW5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyNzcxMjQsImV4cCI6MjEwODg1MzEyNH0.8DRaS3WE9mfDPseEzI58hh51KnC8ClPVPGHWe68Bhes"}};
 window.FAE_WEB = true;
 window.FAE_READY = new Promise(r => window.__faeReady = r);
 window.claude = { use: async n => (await window.FAE_READY).cap(n) };
@@ -266,15 +268,15 @@ window.claude = { use: async n => (await window.FAE_READY).cap(n) };
 </head>
 <body>
 <div id="login" class="lg" hidden>
- <form id="lgForm" class="lg-card" autocomplete="on">
+ <form id="lgForm" class="lg-card" autocomplete="off">
   <img class="lg-logo" id="lgLogo" alt="Federació Andorrana d’Esquí">
   <div class="lg-t"><b>Àrea de rendiment</b><span>Federació Andorrana d’Esquí</span></div>
-  <label>Correu<input id="lgEmail" type="email" autocomplete="username" required></label>
-  <label>Contrasenya<input id="lgPwd" type="password" autocomplete="current-password" required></label>
-  <label class="lg-keep"><input id="lgKeep" type="checkbox" checked> Mantenir la sessió oberta en aquest dispositiu</label>
+  <p class="lg-info">Plataforma interna de l’àrea de rendiment de la FAE. Accés només per al personal tècnic, entrenadors i esportistes de la federació.</p>
+  <label>Codi d’accés<input id="lgCode" class="lg-code" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX" maxlength="9" required></label>
+  <label class="lg-keep"><input id="lgKeep" type="checkbox" checked> Recorda’m en aquest dispositiu</label>
   <button id="lgBtn" class="lg-btn" type="submit">Entrar</button>
-  <button id="lgForgot" class="lg-link" type="button">He oblidat la contrasenya</button>
   <p id="lgMsg" class="lg-msg" role="status"></p>
+  <p class="lg-foot">No tens codi o l’has perdut? Demana’l a l’equip tècnic de la FAE.<br><a href="qui-som.html">Qui som i privacitat</a></p>
  </form>
 </div>
 
@@ -700,7 +702,7 @@ table.wut th,table.wut td{text-align:center} table.wut th:first-child,table.wut 
 .lg-z.warn{background:var(--warn-soft);border:1px solid #f3d3a5}
 .pfgchips{margin:2px 0 8px}.pftchips{margin:0 0 12px}
 .uchip{display:inline-flex;flex-direction:column;line-height:1.15;text-align:right;margin-left:8px}.uchip b{font-size:13px}.uchip .note{font-size:11px}
-.utab .u-off td{opacity:.55}.unew{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.utab .u-off td{opacity:.55}.ucode{font-family:ui-monospace,Menlo,monospace;font-size:13px;letter-spacing:.06em;background:var(--bg,#f4f6f9);padding:2px 6px;border-radius:6px}.newcode{margin-top:14px;padding:14px 16px;border:1px dashed var(--ok);border-radius:12px;background:var(--ok-soft);display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}.newcode b{display:block;font-family:ui-monospace,Menlo,monospace;font-size:28px;letter-spacing:.12em;color:var(--ink)}.unew{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
 .lg-c{background:rgba(154,63,180,.12);border:2px solid var(--esq)}
 .rep-pub{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
 .rep-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
@@ -1178,6 +1180,7 @@ async function init(){
   try{ DB.collection('informes').onSnapshot(snap=>{ REPS=snap.docs.map(d=>({id:d.id, ...d.data()})); renderSoon(); }, ()=>{}); }catch(_){}
   try{ DB.doc('config/site').onSnapshot(s=>{ SITE=s.exists?s.data():null; renderSoon(); }, ()=>{}); }catch(_){}
   try{ DB.doc('config/groups').onSnapshot(s=>{ GRPCFG=(s.exists&&s.data().groups)||{}; GORDER=(s.exists&&s.data().order)||[]; renderSoon(); }, ()=>{}); }catch(_){}
+  try{ DB.doc('config/forms').onSnapshot(s=>{ FORMS=(s.exists&&s.data())||{}; if(S.fm&&!S.fmDirty) S.fm=null; renderSoon(); }, ()=>{}); }catch(_){}
   try{ DB.doc('config/team').onSnapshot(s=>{ TEAM=cleanTeam(s.exists?s.data():null); renderSoon(); }, ()=>{}); }catch(_){}
   try{ DB.doc('config/targets').onSnapshot(s=>{ const d=s.exists?s.data():null; TARGETS=mergeTargets(d?d.vals:null); applyTH(d?d.asym:null); TARGETS_AT=d?d.at||null:null; renderSoon(); }, ()=>{}); }catch(_){}
   renderAll();
@@ -1608,52 +1611,57 @@ function pfRankPick(t){
 let USERS = null, USERS_UNSUB = null;
 const ROLE_L = {staff:'Equip tècnic', coach:'Entrenador/a', athlete:'Corredor/a'};
 function usersEnsure(){ if(USERS_UNSUB || !window.FAE_ADMIN) return; USERS_UNSUB = window.FAE_ADMIN.listen(list=>{ USERS=list.sort((x,y)=>(x.role||'').localeCompare(y.role||'')||(x.name||x.email||'').localeCompare(y.name||y.email||'','ca')); renderSoon(); }); }
+const SITE_URL = 'https://fae-rendiment.github.io/fae-rendiment/';
+const shareTxt = u => `Accés a la plataforma de l’àrea de rendiment de la FAE\n${SITE_URL}\nEl teu codi: ${FAE_FMT(u.code)}\n(És personal: no el comparteixis.)`;
 function vUsuaris(){
-  if(!editable()) return '<div class="panel empty-t">Només l’equip tècnic pot gestionar els usuaris.</div>';
+  if(!editable()) return '<div class="panel empty-t">Només l’equip tècnic pot gestionar els accessos.</div>';
   usersEnsure();
-  const N=S.un||(S.un={role:'athlete', email:'', name:'', eq:'', aid:'', busy:false, err:null, ok:null});
+  const N=S.un||(S.un={role:'athlete', name:'', eq:'', aid:'', busy:false, err:null, made:null});
   const groups=groupsList().filter(g=>g!==NOGRP&&g!==ARCHG), aths=ATH.filter(a=>a.active);
   const used=new Set((USERS||[]).filter(u=>u.role==='athlete'&&u.active!==false).map(u=>u.aid));
   const athName=id=>(byId(id)||{}).name||'—';
   const row=u=>{ const E=S.ue&&S.ue.uid===u.uid?S.ue:null, off=u.active===false;
-    if(E) return `<tr class="ue-edit"><td><b>${esc(u.name||'')}</b><div class="note">${esc(u.email||'')}</div></td>
+    if(E) return `<tr class="ue-edit"><td><b>${esc(u.name||'')}</b><div class="note">${esc(FAE_FMT(u.code))}</div></td>
       <td><select class="sel" id="ueRole">${Object.entries(ROLE_L).map(([k,l])=>`<option value="${k}" ${E.role===k?'selected':''}>${l}</option>`).join('')}</select></td>
       <td>${E.role==='coach'?`<select class="sel" id="ueEq">${groups.map(g=>`<option ${E.eq===g?'selected':''}>${esc(g)}</option>`).join('')}</select>`:E.role==='athlete'?`<select class="sel" id="ueAid">${aths.map(a=>`<option value="${esc(a.id)}" ${E.aid===a.id?'selected':''}>${esc(a.name)}</option>`).join('')}</select>`:'<span class="note">Tot</span>'}</td>
-      <td colspan="2"><div class="row"><button class="btn sm" data-a="ueSave">Desar</button><button class="btn ghost sm" data-a="ueCancel">Cancel·lar</button></div></td></tr>`;
-    return `<tr class="${off?'u-off':''}"><td><b>${esc(u.name||'(sense nom)')}</b><div class="note">${esc(u.email||'')}</div></td>
+      <td colspan="3"><div class="row"><button class="btn sm" data-a="ueSave">Desar</button><button class="btn ghost sm" data-a="ueCancel">Cancel·lar</button><button class="btn link sm" data-a="ueDel" data-v="${esc(u.uid)}" style="color:var(--bad)">Esborrar el codi</button></div></td></tr>`;
+    const me=u.uid===(window.FAE_USER||{}).uid;
+    return `<tr class="${off?'u-off':''}"><td><b>${esc(u.name||'(sense nom)')}</b></td>
       <td><span class="tag">${ROLE_L[u.role]||u.role}</span></td>
       <td>${u.role==='coach'?esc(u.eq||'—'):u.role==='athlete'?esc(athName(u.aid)):'<span class="note">Tot</span>'}</td>
-      <td>${off?'<span class="pill bad">Sense accés</span>':'<span class="pill ok">Actiu</span>'}</td>
-      <td style="text-align:right;white-space:nowrap">${u.uid===(window.FAE_USER||{}).uid?'<span class="note">Tu</span>':`<button class="btn link sm" data-a="ueEdit" data-v="${esc(u.uid)}">Editar</button><button class="btn link sm" data-a="ueMail" data-v="${esc(u.email)}">Reenviar correu</button><button class="btn link sm" data-a="ueToggle" data-v="${esc(u.uid)}" style="color:var(--${off?'ok':'bad'})">${off?'Tornar a donar accés':'Treure accés'}</button>`}</td></tr>`; };
-  return `<div><div class="eyebrow">Accés a la plataforma</div><h1>Usuaris</h1><p class="sub">Crea un compte per a cada persona. Li arribarà un correu per posar la seva contrasenya. L’equip tècnic ho veu i edita tot; l’entrenador/a només veu el seu grup; el corredor/a només veu les seves dades i informes.</p></div>
-  <div class="panel"><div class="panel-h"><h2>Nou usuari</h2></div>
+      <td><code class="ucode">${esc(FAE_FMT(u.code))}</code> <button class="btn link sm" data-a="ueCopy" data-v="${esc(u.uid)}">Copiar</button></td>
+      <td>${off?'<span class="pill bad">Desactivat</span>':'<span class="pill ok">Actiu</span>'}</td>
+      <td style="text-align:right;white-space:nowrap">${me?'<span class="note">Tu</span>':`<button class="btn link sm" data-a="ueEdit" data-v="${esc(u.uid)}">Editar</button><button class="btn link sm" data-a="ueToggle" data-v="${esc(u.uid)}" style="color:var(--${off?'ok':'bad'})">${off?'Reactivar':'Desactivar'}</button>`}</td></tr>`; };
+  const made=N.made?(USERS||[]).find(u=>u.uid===N.made):null;
+  return `<div><div class="eyebrow">Accés a la plataforma</div><h1>Usuaris</h1><p class="sub">Cada persona entra amb un codi personal de 8 caràcters. Crea’l aquí i envia’l per WhatsApp o correu. L’equip tècnic ho veu i edita tot; l’entrenador/a només veu el seu grup; el corredor/a només veu les seves dades i informes. Si un codi s’envia a qui no toca, desactiva’l i crea’n un de nou.</p></div>
+  <div class="panel"><div class="panel-h"><h2>Nou codi d’accés</h2></div>
    <div class="form unew">
     <label class="fld" for="unName">Nom i cognoms<input id="unName" value="${esc(N.name)}" autocomplete="off"></label>
-    <label class="fld" for="unEmail">Correu<input id="unEmail" type="email" value="${esc(N.email)}" autocomplete="off" placeholder="nom@exemple.com"></label>
     <label class="fld" for="unRole">Tipus d’accés<select id="unRole">${Object.entries(ROLE_L).map(([k,l])=>`<option value="${k}" ${N.role===k?'selected':''}>${l}</option>`).join('')}</select></label>
     ${N.role==='coach'?`<label class="fld" for="unEq">Grup<select id="unEq"><option value="">Tria el grup…</option>${groups.map(g=>`<option ${N.eq===g?'selected':''}>${esc(g)}</option>`).join('')}</select></label>`:''}
-    ${N.role==='athlete'?`<label class="fld" for="unAid">Corredor/a<select id="unAid"><option value="">Tria el corredor…</option>${aths.map(a=>`<option value="${esc(a.id)}" ${N.aid===a.id?'selected':''}>${esc(a.name)}${used.has(a.id)?' (ja té compte)':''}</option>`).join('')}</select></label>`:''}
+    ${N.role==='athlete'?`<label class="fld" for="unAid">Corredor/a<select id="unAid"><option value="">Tria el corredor…</option>${aths.map(a=>`<option value="${esc(a.id)}" ${N.aid===a.id?'selected':''}>${esc(a.name)}${used.has(a.id)?' (ja té codi)':''}</option>`).join('')}</select></label>`:''}
    </div>
-   ${N.err?`<p class="err">${esc(N.err)}</p>`:''}${N.ok?`<p class="note" style="color:var(--ok)">${esc(N.ok)}</p>`:''}
-   <div class="row" style="margin-top:12px"><button class="btn" data-a="unCreate" ${N.busy?'disabled':''}>${N.busy?'Creant…':'Crear l’usuari i enviar el correu'}</button></div></div>
-  <div class="panel"><div class="panel-h"><div><h2>Usuaris amb compte</h2><div class="note">${USERS?USERS.length+' usuaris':'Carregant…'}</div></div></div>
-   ${USERS&&USERS.length?`<div class="tw"><table class="utab"><thead><tr><th>Persona</th><th>Accés</th><th>Veu</th><th>Estat</th><th></th></tr></thead><tbody>${USERS.map(row).join('')}</tbody></table></div>`:'<p class="empty-t">Encara no hi ha usuaris.</p>'}</div>
-  ${importPanel()}`;
+   ${N.err?`<p class="err">${esc(N.err)}</p>`:''}
+   <div class="row" style="margin-top:12px"><button class="btn" data-a="unCreate" ${N.busy?'disabled':''}>${N.busy?'Creant…':'Crear el codi'}</button></div>
+   ${made?`<div class="newcode"><div><span class="note">Codi de ${esc(made.name||'')}</span><b>${esc(FAE_FMT(made.code))}</b></div><div class="row"><button class="btn sm" data-a="ueCopy" data-v="${esc(made.uid)}">Copiar missatge</button><a class="btn ghost sm" href="https://wa.me/?text=${encodeURIComponent(shareTxt(made))}" target="_blank" rel="noopener">Enviar per WhatsApp</a></div></div>`:''}</div>
+  <div class="panel"><div class="panel-h"><div><h2>Codis creats</h2><div class="note">${USERS?USERS.length+' codis':'Carregant…'}</div></div></div>
+   ${USERS&&USERS.length?`<div class="tw"><table class="utab"><thead><tr><th>Persona</th><th>Accés</th><th>Veu</th><th>Codi</th><th>Estat</th><th></th></tr></thead><tbody>${USERS.map(row).join('')}</tbody></table></div>`:'<p class="empty-t">Encara no hi ha codis.</p>'}</div>
+  ${formsPanel()}${importPanel()}`;
 }
 function importPanel(){ return `<div class="panel imp-panel"><div class="panel-h"><div><h2>Importar dades</h2><div class="note">Per carregar un fitxer JSON preparat per Claude (dades o fotos dels corredors).</div></div></div>
    <label class="btn" style="display:inline-flex;cursor:pointer">Triar el fitxer i importar<input type="file" id="impFile" accept="application/json,.json" style="display:none"></label>${S.imp?`<p class="note" style="margin-top:10px"><b>${esc(S.imp)}</b></p>`:''}</div>`; }
 async function unCreate(){
-  const N=S.un; N.err=null; N.ok=null;
-  const email=(N.email||'').trim().toLowerCase();
-  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ N.err='Escriu un correu vàlid.'; return renderMain(); }
+  const N=S.un; N.err=null; N.made=null;
+  if(!(N.name||'').trim()){ N.err='Escriu el nom de la persona.'; return renderMain(); }
   if(N.role==='coach'&&!N.eq){ N.err='Tria el grup de l’entrenador/a.'; return renderMain(); }
   if(N.role==='athlete'&&!N.aid){ N.err='Tria el corredor/a.'; return renderMain(); }
-  if((USERS||[]).some(u=>(u.email||'').toLowerCase()===email)){ N.err='Aquest correu ja té compte a la llista.'; return renderMain(); }
   N.busy=true; renderMain();
-  try{ await FAE_ADMIN.create({email, name:(N.name||'').trim(), role:N.role, eq:N.eq, aid:N.aid}); S.un={role:N.role, email:'', name:'', eq:N.eq, aid:'', busy:false, err:null, ok:`Compte creat. Hem enviat un correu a ${email} per posar la contrasenya.`}; }
-  catch(e){ N.busy=false; N.err = e&&e.code==='auth/email-already-in-use' ? 'Aquest correu ja té un compte creat (potser sense perfil). Escriu a Claude per recuperar-lo.' : e&&e.code==='auth/weak-password' ? 'Contrasenya massa feble.' : 'No s’ha pogut crear el compte. Torna-ho a provar.'; }
+  try{ const c=await FAE_ADMIN.create({name:(N.name||'').trim(), role:N.role, eq:N.eq, aid:N.aid}); S.un={role:N.role, name:'', eq:N.eq, aid:'', busy:false, err:null, made:c}; }
+  catch(e){ console.error(e); N.busy=false; N.err='No s’ha pogut crear el codi. Torna-ho a provar.'; }
   renderMain();
 }
+async function copyCode(id){ const u=(USERS||[]).find(x=>x.uid===id); if(!u) return; const t=shareTxt(u);
+  try{ await navigator.clipboard.writeText(t); toast('Missatge copiat: enganxa’l a WhatsApp o al correu'); }catch(_){ prompt('Copia aquest missatge:', t); } }
 async function importFile(f){
   try{ const json=JSON.parse(await f.text()); S.imp='Important…'; renderMain();
     const n=await FAE_ADMIN.importData(json,(d,t)=>{ S.imp=`Important… ${d} de ${t}`; renderSoon(); });
@@ -1662,7 +1670,22 @@ async function importFile(f){
   renderMain();
 }
 /* capçalera: usuari i sortir */
-function webUserChip(){ const u=window.FAE_USER; if(!u) return ''; return `<span class="uchip"><b>${esc(u.name||u.email)}</b><span class="note">${ROLE_L[u.role]||''}</span></span><button class="btn ghost sm" data-a="logout">Sortir</button>`; }
+function webUserChip(){ const u=window.FAE_USER; if(!u) return ''; return `<span class="uchip"><b>${esc(u.name)}</b><span class="note">${ROLE_L[u.role]||''}</span></span><button class="btn ghost sm" data-a="logout">Sortir</button>`; }
+
+/* ---------- Enllaços a formularis (fitxa de lesió…) ---------- */
+let FORMS = {};
+const FORM_DEFS = [['lesio','Fitxa i informe de lesió','La veuen l’equip tècnic i els entrenadors a la fitxa de cada corredor.']];
+function formUrl(k, a){ const u=(FORMS[k]||'').trim(); if(!/^https:\/\//.test(u)) return ''; return a ? u.replace(/=NOM(?=&|#|$)/g, '='+encodeURIComponent(a.name||'')) : u; }
+function lesioBtn(a){ if(S.mode!=='staff' || (window.FAE_USER||{}).role==='athlete') return '';
+  const u=formUrl('lesio',a); if(u) return `<a class="btn ghost lesio-btn" href="${esc(u)}" target="_blank" rel="noopener">🩹 Fitxa de lesió</a>`;
+  return editable()?`<button class="btn ghost" data-a="tab" data-v="usuaris" title="Encara no hi ha enllaç">🩹 Configurar fitxa de lesió</button>`:''; }
+function formsPanel(){ const F=S.fm||(S.fm={...FORMS});
+  return `<div class="panel"><div class="panel-h"><div><h2>Enllaços de formularis</h2><div class="note">Enganxa l’enllaç del Google Form. Perquè surti el nom del corredor ja escrit: al formulari, «⋮ → Obtén l’enllaç emplenat prèviament», escriu <b>NOM</b> a la pregunta del nom i copia aquell enllaç.</div></div></div>
+   <div class="form">${FORM_DEFS.map(([k,l,d])=>`<label class="fld" for="fm_${k}">${l}<input id="fm_${k}" data-fm="${k}" value="${esc(F[k]||'')}" placeholder="https://docs.google.com/forms/…" autocomplete="off"><span class="note">${d}</span></label>`).join('')}</div>
+   <div class="row" style="margin-top:12px"><button class="btn" data-a="formsSave">Desar enllaços</button></div></div>`; }
+async function formsSave(){ const F=S.fm||{}; const out={}; FORM_DEFS.forEach(([k])=>{ out[k]=(F[k]||'').trim(); });
+  if(Object.values(out).some(u=>u && !/^https:\/\//.test(u))){ toast('L’enllaç ha de començar per https://'); return; }
+  try{ await DB.doc('config/forms').set(out); FORMS=out; toast('Enllaços desats'); }catch(_){ toast('No s’han pogut desar.'); } renderMain(); }
 
 /* ---------- views: global ---------- */
 function eqCard(a){
@@ -1744,7 +1767,7 @@ async function teSave(){
 function heroAthlete(a){
   return `<div class="hero">${avatar(a,'xl')}<div class="info"><div class="eyebrow">${esc(mcL(a))} · ${sexL(a)}${a.active?'':' · arxivat'}</div><h1>${esc(a.name)}</h1>
      <div class="facts" style="margin-top:8px"><div><span>Naixement</span>${a.naix||'–'}</div><div><span>Disciplines</span>${esc(a.disc)||'–'}</div><div><span>Pes</span>${a.pes?fx(a.pes,1)+' kg':'–'}</div></div></div>
-   <div class="row">${editable()?`<button class="btn ghost" data-a="editath" data-v="${esc(a.id)}">${ICO.edit}Editar perfil</button>`:''}${canMakeReports()?`<button class="btn" data-a="mkrep" data-v="fisio">Informe fisio</button><button class="btn ghost" data-a="mkrep" data-v="fisic">Informe físic</button>`:''}</div></div>`;
+   <div class="row">${lesioBtn(a)}${editable()?`<button class="btn ghost" data-a="editath" data-v="${esc(a.id)}">${ICO.edit}Editar perfil</button>`:''}${canMakeReports()?`<button class="btn" data-a="mkrep" data-v="fisio">Informe fisio</button><button class="btn ghost" data-a="mkrep" data-v="fisic">Informe físic</button>`:''}</div></div>`;
 }
 function resumAthlete(a){
   const al=alertsOf(a), {f,d}=lastDate(a), rows=pfRows(a), lastNote=a.notes.slice().sort((x,y)=>(y.m||'').localeCompare(x.m||''))[0];
@@ -3455,10 +3478,12 @@ document.addEventListener('click', async e=>{
   else if(a==='cmod'){ S.mod=v; S.cat='Totes'; }
   else if(a==='logout'){ FAE_LOGOUT(); return; }
   else if(a==='unCreate'){ unCreate(); return; }
+  else if(a==='formsSave'){ S.fmDirty=false; formsSave(); return; }
   else if(a==='ueEdit'){ const u=(USERS||[]).find(x=>x.uid===v); if(u) S.ue={uid:u.uid, role:u.role, eq:u.eq||groupsList()[0]||'', aid:u.aid||(ATH[0]||{}).id||''}; }
   else if(a==='ueCancel'){ S.ue=null; }
   else if(a==='ueSave'){ const E=S.ue; if(E){ try{ await FAE_ADMIN.update(E.uid,{role:E.role, eq:E.role==='coach'?E.eq:'', aid:E.role==='athlete'?E.aid:''}); toast('Usuari desat'); S.ue=null; }catch(_){ toast('No s’ha pogut desar.'); } } }
-  else if(a==='ueMail'){ try{ await FAE_ADMIN.resetMail(v); toast('Correu enviat'); }catch(_){ toast('No s’ha pogut enviar.'); } return; }
+  else if(a==='ueCopy'){ copyCode(v); return; }
+  else if(a==='ueDel'){ if(confirm('Esborrar aquest codi? La persona ja no podrà entrar.')){ try{ await FAE_ADMIN.remove(v); S.ue=null; toast('Codi esborrat'); }catch(_){ toast('No s’ha pogut esborrar.'); } } }
   else if(a==='ueToggle'){ const u=(USERS||[]).find(x=>x.uid===v); if(u){ try{ await FAE_ADMIN.update(u.uid,{active:u.active===false}); toast(u.active===false?'Accés restablert':'Accés tret'); }catch(_){ toast('No s’ha pogut canviar.'); } } return; }
   else if(a==='grEdit'){ if(editable()) { grOpen(); window.scrollTo(0,0); } }
   else if(a==='grUp'||a==='grDown'){ const E=S.grEd, i=+v, j=a==='grUp'?i-1:i+1; if(E&&E.rows[j]){ const t0=E.rows[i]; E.rows[i]=E.rows[j]; E.rows[j]=t0; } }
@@ -3632,7 +3657,8 @@ document.addEventListener('input', e=>{
     const b=document.getElementById('pmSaveBtn'); if(b){ const n=pmDirty(); b.disabled=!n; b.textContent='Desar resultats ('+n+' corredor'+(n>1?'s':'')+')'; if(!was&&n===1) renderMain(); } return; }
   if(t.dataset && t.dataset.tem!=null && S.teamEd){ S.teamEd.mods[+t.dataset.tem].n=t.value; return; }
   if(t.dataset && t.dataset.tec!=null && S.teamEd){ const [mi,ci]=t.dataset.tec.split('|').map(Number); S.teamEd.mods[mi].cats[ci].n=t.value; return; }
-  if(S.un && (t.id==='unName'||t.id==='unEmail')){ S.un[t.id==='unName'?'name':'email']=t.value; return; }
+  if(t.dataset && t.dataset.fm){ S.fm=S.fm||{...FORMS}; S.fm[t.dataset.fm]=t.value; S.fmDirty=true; return; }
+  if(S.un && t.id==='unName'){ S.un.name=t.value; return; }
   if(t.dataset && t.dataset.gre!=null && S.grEd){ const r=S.grEd.rows[+t.dataset.gre]; if(r) r.n=t.value; return; }
   if(t.dataset && t.dataset.obs!=null){ S.obs[t.dataset.obs]=t.value; const sec=t.closest('section'); if(sec) sec.classList.toggle('is-empty', !t.value.trim()); return; }
   if(t.id==='pmPlace' && S.pm){ S.pm.place=t.value; pmSave(); return; }
@@ -3660,197 +3686,229 @@ init();
 
 <script>try{ document.getElementById('lgLogo').src=FAE_LOGO; }catch(_){}</script>
 <script type="module">
-/* FAE · Àrea de rendiment — connexió amb Firebase (usuaris + base de dades)
-   Fa de pont entre l'aplicació i Firebase: l'aplicació demana window.claude.use('db'|'user'|...)
-   i aquí es resol amb Firestore, filtrant les dades segons el rol de cada usuari. */
-import { initializeApp, deleteApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, createUserWithEmailAndPassword, setPersistence, browserLocalPersistence, browserSessionPersistence } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
-import { getFirestore, doc, collection, onSnapshot, setDoc, deleteDoc, getDoc, getDocs, query, where, writeBatch } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+/* FAE · Àrea de rendiment — connexió amb Supabase (accés per codi + base de dades)
+   Fa de pont entre l'aplicació i Supabase: l'aplicació demana window.claude.use('db'|'user'|...)
+   i aquí es resol amb la taula «docs». Les regles d'accés (RLS) de Supabase filtren què veu cada rol. */
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm';
 
 const CFG = window.FAE_CONFIG;
-const app = initializeApp(CFG.firebase);
-const auth = getAuth(app);
-const fs = getFirestore(app);
-let P = null;              // perfil de l'usuari: {uid, email, name, role, eq, aid}
-let ATHMAP = {};           // id corredor -> grup (per mantenir el camp eq a salut i informes)
+const KEEP_K = 'fae_keep';
+const keep = () => { try { return localStorage.getItem(KEEP_K) !== '0'; } catch (_) { return true; } };
+const store = {   // «Recorda'm»: sessió al localStorage; si no, només mentre la pestanya està oberta
+  getItem: k => { try { return (keep() ? localStorage : sessionStorage).getItem(k); } catch (_) { return null; } },
+  setItem: (k, v) => { try { (keep() ? localStorage : sessionStorage).setItem(k, v); } catch (_) {} },
+  removeItem: k => { try { localStorage.removeItem(k); sessionStorage.removeItem(k); } catch (_) {} },
+};
+const sb = createClient(CFG.supabase.url, CFG.supabase.key, { auth: { persistSession: true, autoRefreshToken: true, storage: store, storageKey: 'fae-auth' } });
 
-/* Firestore no admet llistes dins de llistes: es codifiquen i descodifiquen aquí */
-const enc = x => Array.isArray(x) ? x.map(v => Array.isArray(v) ? {__nested: enc(v)} : enc(v))
-  : (x && typeof x === 'object') ? Object.fromEntries(Object.entries(x).filter(([,v])=>v!==undefined).map(([k,v]) => [k, enc(v)])) : x;
-const dec = x => Array.isArray(x) ? x.map(v => (v && typeof v === 'object' && !Array.isArray(v) && '__nested' in v && Object.keys(v).length===1) ? dec(v.__nested) : dec(v))
-  : (x && typeof x === 'object') ? Object.fromEntries(Object.entries(x).map(([k,v]) => [k, dec(v)])) : x;
-const PRIV = ['comm','fb'];  // camps de salut que només pot llegir l'equip tècnic
-const splitSalut = d => { const pub={...d}, priv={}; PRIV.forEach(k=>{ if(k in pub){ priv[k]=pub[k]; delete pub[k]; } }); if(pub.mon && pub.mon.fb){ priv.monfb=pub.mon.fb; pub.mon={...pub.mon}; delete pub.mon.fb; } return {pub, priv}; };
-const joinSalut = (pub, priv) => { const d={...pub}; if(priv){ PRIV.forEach(k=>{ if(k in priv) d[k]=priv[k]; }); if(priv.monfb && d.mon) d.mon={...d.mon, fb:priv.monfb}; } return d; };
+let P = null;              // perfil: {uid, code, name, role, eq, aid}
+let ATHMAP = {};           // id corredor -> grup
+const PRIV = ['comm', 'fb'];
+const splitSalut = d => { const pub = { ...d }, priv = {}; PRIV.forEach(k => { if (k in pub) { priv[k] = pub[k]; delete pub[k]; } }); if (pub.mon && pub.mon.fb) { priv.monfb = pub.mon.fb; pub.mon = { ...pub.mon }; delete pub.mon.fb; } return { pub, priv }; };
+const joinSalut = (pub, priv) => { const d = { ...pub }; if (priv) { PRIV.forEach(k => { if (k in priv) d[k] = priv[k]; }); if (priv.monfb && d.mon) d.mon = { ...d.mon, fb: priv.monfb }; } return d; };
+const unNest = x => Array.isArray(x) ? x.map(v => (v && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length === 1 && '__nested' in v) ? unNest(v.__nested) : unNest(v))
+  : (x && typeof x === 'object') ? Object.fromEntries(Object.entries(x).map(([k, v]) => [k, unNest(v)])) : x;
+const clean = x => JSON.parse(JSON.stringify(x ?? {}));   // treu «undefined»
 
 const wrapDocs = arr => ({ docs: arr.map(([id, data]) => ({ id, data: () => data })) });
 const wrapOne = (exists, data) => ({ exists, data: () => data });
 const isStaff = () => P && P.role === 'staff';
-const rid = () => { const c='abcdefghijklmnopqrstuvwxyz0123456789'; let s=''; for(let i=0;i<20;i++) s+=c[Math.floor(Math.random()*c.length)]; return s; };
+const rid = () => { const c = 'abcdefghijklmnopqrstuvwxyz0123456789'; let s = ''; for (let i = 0; i < 20; i++) s += c[Math.floor(Math.random() * c.length)]; return s; };
+const fail = (e, what) => { if (e) { console.error(what, e); throw { code: e.code || 'error', message: e.message }; } };
 
-/* ---- vista de col·leccions segons el rol ---- */
+/* columnes de filtre (grup i corredor) segons la col·lecció */
+function cols(c, id, data){
+  if (c === 'athletes') return { eq: data.eq || '', aid: id };
+  if (c === 'salut' || c === 'salut_priv') return { eq: id === '_sync' ? '' : (ATHMAP[id] ?? data.eq ?? ''), aid: id === '_sync' ? '' : id };
+  if (c === 'informes') return { eq: ATHMAP[data.aid] ?? data.eq ?? '', aid: data.aid || '' };
+  return { eq: '', aid: '' };
+}
+const row = (c, id, data) => ({ col: c, id, data: clean(data), ...cols(c, id, data), updated_at: new Date().toISOString() });
+
+/* ---- lectura: consulta + refresc quan hi ha canvis (en directe) ---- */
+async function fetchCol(c){
+  const out = []; let from = 0;
+  for (;;) {
+    let q = sb.from('docs').select('id,data').eq('col', c).order('id').range(from, from + 999);
+    if (!isStaff() && P.role === 'coach') q = q.eq('eq', P.eq || '—');
+    if (!isStaff() && P.role === 'athlete') q = c === 'informes' ? q.eq('aid', P.aid || '—') : q.eq('id', P.aid || '—');
+    const { data, error } = await q; fail(error, c);
+    data.forEach(r => out.push([r.id, unNest(r.data)])); if (data.length < 1000) break; from += 1000;
+  }
+  return out;
+}
+let chN = 0;
+function onChange(table, filter, fn){
+  let t = null; const run = () => { clearTimeout(t); t = setTimeout(fn, 350); };
+  const ch = sb.channel('fae-' + (++chN)).on('postgres_changes', { event: '*', schema: 'public', table, ...(filter ? { filter } : {}) }, run).subscribe();
+  return () => { clearTimeout(t); sb.removeChannel(ch); };
+}
 function listen(c, cb, err){
   const E = e => { console.error(c, e); err && err(e); };
-  const fromSnap = s => s.docs.map(d => [d.id, dec(d.data())]);
-  if (isStaff()) {
-    if (c === 'salut') {
-      let pub = null, priv = {};
-      const emit = () => { if (pub) cb(wrapDocs(pub.map(([id, d]) => [id, joinSalut(d, priv[id])]))); };
-      const u1 = onSnapshot(collection(fs, 'salut'), s => { pub = fromSnap(s); emit(); }, E);
-      const u2 = onSnapshot(collection(fs, 'salut_priv'), s => { priv = Object.fromEntries(fromSnap(s)); emit(); }, ()=>{});
-      return () => { u1(); u2(); };
-    }
-    return onSnapshot(collection(fs, c), s => { const r = fromSnap(s); if (c === 'athletes') ATHMAP = Object.fromEntries(r.map(([id, d]) => [id, d.eq || ''])); cb(wrapDocs(r)); }, E);
-  }
-  if (!['athletes', 'salut', 'informes'].includes(c)) { cb(wrapDocs([])); return () => {}; }
-  if (P.role === 'coach') return onSnapshot(query(collection(fs, c), where('eq', '==', P.eq || '—')), s => cb(wrapDocs(fromSnap(s))), E);
-  if (P.role === 'athlete') {
-    if (c === 'informes') return onSnapshot(query(collection(fs, c), where('aid', '==', P.aid || '—')), s => cb(wrapDocs(fromSnap(s))), E);
-    return onSnapshot(doc(fs, c, P.aid || '—'), s => cb(wrapDocs(s.exists() ? [[s.id, dec(s.data())]] : [])), E);
-  }
-  cb(wrapDocs([])); return () => {};
+  if (!isStaff() && !['athletes', 'salut', 'informes'].includes(c)) { cb(wrapDocs([])); return () => {}; }
+  let alive = true;
+  const load = async () => {
+    try {
+      let r = await fetchCol(c);
+      if (isStaff() && c === 'salut') { const pv = Object.fromEntries(await fetchCol('salut_priv')); r = r.map(([id, d]) => [id, joinSalut(d, pv[id])]); }
+      if (c === 'athletes') ATHMAP = Object.fromEntries(r.map(([id, d]) => [id, d.eq || '']));
+      if (alive) cb(wrapDocs(r));
+    } catch (e) { E(e); }
+  };
+  load();
+  const off1 = onChange('docs', 'col=eq.' + c, load);
+  const off2 = isStaff() && c === 'salut' ? onChange('docs', 'col=eq.salut_priv', load) : () => {};
+  return () => { alive = false; off1(); off2(); };
 }
 
 const DB = {
-  collection: c => ({
-    onSnapshot: (cb, err) => listen(c, cb, err),
-    doc: () => ({ id: rid() }),
-  }),
+  collection: c => ({ onSnapshot: (cb, err) => listen(c, cb, err), doc: () => ({ id: rid() }) }),
   doc: path => {
     const [c, id] = path.split('/');
     return {
       onSnapshot: (cb, err) => {
         if (path === 'config/site') { cb(wrapOne(P.role === 'coach', P.role === 'coach' ? { team: P.eq } : undefined)); return () => {}; }
-        return onSnapshot(doc(fs, c, id), s => cb(wrapOne(s.exists(), s.exists() ? dec(s.data()) : undefined)), e => { err && err(e); });
+        let alive = true;
+        const load = async () => {
+          const { data, error } = await sb.from('docs').select('data').eq('col', c).eq('id', id).maybeSingle();
+          if (!alive) return; if (error) { err && err(error); return; }
+          cb(wrapOne(!!data, data ? unNest(data.data) : undefined));
+        };
+        load(); const off = onChange('docs', 'col=eq.' + c, load);
+        return () => { alive = false; off(); };
       },
       set: async data => {
         if (!isStaff()) throw { code: 'permission-denied' };
         if (c === 'salut') {
           const { pub, priv } = splitSalut(data);
-          pub.eq = ATHMAP[id] || ''; pub.aid = id;
-          await setDoc(doc(fs, 'salut', id), enc(pub));
-          await setDoc(doc(fs, 'salut_priv', id), enc(priv));
-          return;
+          const { error } = await sb.from('docs').upsert([row('salut', id, pub), row('salut_priv', id, priv)]); fail(error, path); return;
         }
-        if (c === 'informes') { data = { ...data, eq: ATHMAP[data.aid] || '' }; }
         if (c === 'athletes') {
           const prevEq = ATHMAP[id], newEq = data.eq || '';
-          await setDoc(doc(fs, c, id), enc(data));
-          if (prevEq !== undefined && prevEq !== newEq) {   // el corredor canvia de grup: s'actualitza el grup a les seves dades de salut i informes
+          const { error } = await sb.from('docs').upsert(row(c, id, data)); fail(error, path);
+          if (prevEq !== undefined && prevEq !== newEq) {   // canvi de grup: s'actualitza a salut i informes
             ATHMAP[id] = newEq;
-            const b = writeBatch(fs);
-            const s = await getDoc(doc(fs, 'salut', id)); if (s.exists()) b.set(doc(fs, 'salut', id), { eq: newEq }, { merge: true });
-            const inf = await getDocs(query(collection(fs, 'informes'), where('aid', '==', id)));
-            inf.forEach(d => b.set(d.ref, { eq: newEq }, { merge: true }));
-            await b.commit();
+            await sb.from('docs').update({ eq: newEq }).in('col', ['salut', 'salut_priv']).eq('id', id);
+            await sb.from('docs').update({ eq: newEq }).eq('col', 'informes').eq('aid', id);
           }
           return;
         }
-        await setDoc(doc(fs, c, id), enc(data));
+        const { error } = await sb.from('docs').upsert(row(c, id, data)); fail(error, path);
       },
       delete: async () => {
         if (!isStaff()) throw { code: 'permission-denied' };
-        await deleteDoc(doc(fs, c, id));
-        if (c === 'salut') await deleteDoc(doc(fs, 'salut_priv', id)).catch(() => {});
+        const q = sb.from('docs').delete(); const { error } = c === 'salut' ? await q.in('col', ['salut', 'salut_priv']).eq('id', id) : await q.eq('col', c).eq('id', id); fail(error, path);
       },
     };
   },
 };
 
-/* ---- fotos: guardades comprimides a la base de dades ---- */
+/* ---- fotos ---- */
 const FOTO = {}, FOTO_LOADING = {};
 window.FAE_FOTO = id => {
   if (!id) return '';
   if (FOTO[id]) return FOTO[id];
-  if (!FOTO_LOADING[id]) { FOTO_LOADING[id] = 1; getDoc(doc(fs, 'fotos', id)).then(s => { if (s.exists()) { FOTO[id] = s.data().d; window.renderSoon && window.renderSoon(); } }).catch(() => {}); }
+  if (!FOTO_LOADING[id]) { FOTO_LOADING[id] = 1; sb.from('docs').select('data').eq('col', 'fotos').eq('id', id).maybeSingle().then(({ data }) => { if (data && data.data.d) { FOTO[id] = data.data.d; window.renderSoon && window.renderSoon(); } }); }
   return 'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
 };
 const blobToData = b => new Promise((r, j) => { const f = new FileReader(); f.onload = () => r(f.result); f.onerror = j; f.readAsDataURL(b); });
 const ASSETS = {
-  upload: async blob => { const id = rid(), d = await blobToData(blob); if (d.length > 700000) throw new Error('foto massa gran'); await setDoc(doc(fs, 'fotos', id), { d, at: new Date().toISOString() }); FOTO[id] = d; return { id }; },
-  delete: async id => { await deleteDoc(doc(fs, 'fotos', id)); },
+  upload: async blob => { const id = rid(), d = await blobToData(blob); if (d.length > 700000) throw new Error('foto massa gran'); const { error } = await sb.from('docs').upsert(row('fotos', id, { d, at: new Date().toISOString() })); fail(error, 'foto'); FOTO[id] = d; return { id }; },
+  delete: async id => { await sb.from('docs').delete().eq('col', 'fotos').eq('id', id); },
 };
 
 function cap(name){
   if (name === 'db') return DB;
   if (name === 'user') return { can: async () => null, canEdit: async () => isStaff() };
   if (name === 'assets') return isStaff() ? ASSETS : null;
-  return null; // downloads, mcp, permissions: la web fa servir les alternatives pròpies
+  return null;
 }
 
-/* ---- administració d'usuaris (només equip tècnic) ---- */
-const randPwd = () => { const a = new Uint8Array(18); crypto.getRandomValues(a); return Array.from(a, b => ('0' + b.toString(16)).slice(-2)).join('') + 'Aa1!'; };
+/* ---- codis d'accés (només equip tècnic) ---- */
+const ABC = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';   // sense lletres o números que es confonen (0/O, 1/I/L)
+const newCode = () => { const a = new Uint32Array(8); crypto.getRandomValues(a); return Array.from(a, n => ABC[n % ABC.length]).join(''); };
+const normCode = c => String(c || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+window.FAE_FMT = c => { c = normCode(c); return c.length === 8 ? c.slice(0, 4) + '-' + c.slice(4) : c; };
 window.FAE_ADMIN = {
-  listen: cb => isStaff() ? onSnapshot(collection(fs, 'users'), s => cb(s.docs.map(d => ({ uid: d.id, ...d.data() }))), () => cb([])) : () => {},
-  create: async ({ email, name, role, eq, aid }) => {
-    if (!isStaff()) throw { code: 'permission-denied' };
-    const app2 = initializeApp(CFG.firebase, 'alta-' + Date.now());
-    const auth2 = getAuth(app2);
-    try {
-      const cred = await createUserWithEmailAndPassword(auth2, email, randPwd());
-      await setDoc(doc(fs, 'users', cred.user.uid), { email, name: name || '', role, eq: role === 'coach' ? (eq || '') : '', aid: role === 'athlete' ? (aid || '') : '', active: true, created: new Date().toISOString(), by: P.email });
-      await sendPasswordResetEmail(auth, email);
-      return cred.user.uid;
-    } finally { await signOut(auth2).catch(() => {}); await deleteApp(app2).catch(() => {}); }
+  listen: cb => {
+    if (!isStaff()) return () => {};
+    const load = async () => { const { data, error } = await sb.from('codes').select('*').order('created'); if (error) { cb([]); return; } cb(data.map(d => ({ uid: d.code, ...d }))); };
+    load(); return onChange('codes', null, load);
   },
-  update: async (uid, data) => { if (!isStaff()) throw { code: 'permission-denied' }; await setDoc(doc(fs, 'users', uid), data, { merge: true }); },
-  resetMail: async email => sendPasswordResetEmail(auth, email),
+  create: async ({ name, role, eq, aid }) => {
+    if (!isStaff()) throw { code: 'permission-denied' };
+    for (let k = 0; k < 5; k++) {
+      const c = newCode();
+      const { error } = await sb.from('codes').insert({ code: c, name: name || '', role, eq: role === 'coach' ? (eq || '') : '', aid: role === 'athlete' ? (aid || '') : '', active: true, by: P.name || '' });
+      if (!error) return c;
+      if (error.code !== '23505') fail(error, 'codi');   // 23505 = el codi ja existeix: en provem un altre
+    }
+    throw { code: 'no-code' };
+  },
+  update: async (code, data) => { if (!isStaff()) throw { code: 'permission-denied' }; const { error } = await sb.from('codes').update(data).eq('code', code); fail(error, 'codi'); },
+  remove: async code => { if (!isStaff()) throw { code: 'permission-denied' }; const { error } = await sb.from('codes').delete().eq('code', code); fail(error, 'codi'); },
   importData: async (json, onProgress) => {
     if (!isStaff()) throw { code: 'permission-denied' };
-    const ops = [];
-    const eqOf = Object.fromEntries((json.athletes || []).map(a => [a.id, a.data.eq || '']));
-    (json.athletes || []).forEach(a => ops.push(['athletes', a.id, a.data]));
-    (json.salut || []).forEach(s => { const { pub, priv } = splitSalut(s.data); pub.eq = eqOf[s.id] || ''; pub.aid = s.id; ops.push(['salut', s.id, pub]); ops.push(['salut_priv', s.id, priv]); });
-    (json.config || []).forEach(c => ops.push(['config', c.id, c.data]));
-    (json.informes || []).forEach(i => ops.push(['informes', i.id, { ...i.data, eq: eqOf[i.data.aid] || '' }]));
-    (json.fotos || []).forEach(f => ops.push(['fotos', f.id, { d: f.d, at: new Date().toISOString() }]));
-    (json.athletePhotos || []).forEach(x => ops.push(['athletes', x.aid, { photo: x.id }, true]));   // només canvia la foto del corredor
-    let done = 0;
-    for (let i = 0; i < ops.length; i += 20) {
-      const b = writeBatch(fs);
-      ops.slice(i, i + 20).forEach(([c, id, d, merge]) => merge ? b.set(doc(fs, c, id), enc(d), { merge: true }) : b.set(doc(fs, c, id), enc(d)));
-      await b.commit(); done += Math.min(20, ops.length - i); onProgress && onProgress(done, ops.length);
+    (json.athletes || []).forEach(a => { ATHMAP[a.id] = a.data.eq || ''; });
+    const rows = [];
+    (json.athletes || []).forEach(a => rows.push(row('athletes', a.id, unNest(a.data))));
+    (json.salut || []).forEach(s => { const { pub, priv } = splitSalut(unNest(s.data)); rows.push(row('salut', s.id, pub)); if (s.id !== '_sync') rows.push(row('salut_priv', s.id, priv)); });
+    (json.config || []).forEach(c => rows.push(row('config', c.id, unNest(c.data))));
+    (json.informes || []).forEach(i => rows.push(row('informes', i.id, unNest(i.data))));
+    (json.fotos || []).forEach(f => rows.push(row('fotos', f.id, { d: f.d, at: new Date().toISOString() })));
+    if ((json.athletePhotos || []).length) {   // només canvia la foto del corredor: es llegeix la fitxa actual i s'hi posa la foto
+      const ids = json.athletePhotos.map(x => x.aid);
+      const { data, error } = await sb.from('docs').select('id,data').eq('col', 'athletes').in('id', ids); fail(error, 'fitxes');
+      const cur = Object.fromEntries(data.map(r => [r.id, r.data]));
+      json.athletePhotos.forEach(x => { if (cur[x.aid]) rows.push(row('athletes', x.aid, { ...cur[x.aid], photo: x.id })); });
     }
-    return ops.length;
+    let done = 0;
+    for (let i = 0; i < rows.length; i += 25) {
+      const { error } = await sb.from('docs').upsert(rows.slice(i, i + 25)); fail(error, 'importació');
+      done += Math.min(25, rows.length - i); onProgress && onProgress(done, rows.length);
+    }
+    return rows.length;
   },
 };
 
-/* ---- inici de sessió ---- */
+/* ---- entrada amb codi ---- */
 const $ = id => document.getElementById(id);
-let keepMsg = null;
-const showLogin = (msg, isErr) => { if (!msg && keepMsg) { [msg, isErr] = keepMsg; keepMsg = null; } $('login').hidden = false; $('lgMsg').textContent = msg || ''; $('lgMsg').className = isErr ? 'lg-msg err' : 'lg-msg'; };
-const ERR = { 'auth/invalid-credential': 'El correu o la contrasenya no són correctes.', 'auth/wrong-password': 'El correu o la contrasenya no són correctes.', 'auth/user-not-found': 'El correu o la contrasenya no són correctes.', 'auth/too-many-requests': 'Massa intents. Espera uns minuts o recupera la contrasenya.', 'auth/invalid-email': 'El correu no és vàlid.', 'auth/network-request-failed': 'No hi ha connexió a internet.' };
+const showLogin = (msg, isErr) => { $('login').hidden = false; $('lgMsg').textContent = msg || ''; $('lgMsg').className = isErr ? 'lg-msg err' : 'lg-msg'; };
+$('lgCode').addEventListener('input', e => { const v = normCode(e.target.value).slice(0, 8); const f = v.length > 4 ? v.slice(0, 4) + '-' + v.slice(4) : v; if (e.target.value !== f) e.target.value = f; });
+async function loadProfile(){
+  const { data: { session } } = await sb.auth.getSession(); if (!session) return null;
+  const { data: s } = await sb.from('sessions').select('code').eq('uid', session.user.id).maybeSingle(); if (!s) return null;
+  const { data: d } = await sb.from('codes').select('*').eq('code', s.code).maybeSingle();
+  if (!d || d.active !== true) return null;
+  return { uid: d.code, code: d.code, name: d.name || 'Usuari', role: d.role, eq: d.eq || '', aid: d.aid || '' };
+}
+let started = false;
+async function start(){
+  if (started) return true;
+  const p = await loadProfile(); if (!p) return false;
+  P = p; window.FAE_USER = P; started = true;
+  $('login').hidden = true;
+  window.__faeReady({ cap });
+  return true;
+}
 $('lgForm').addEventListener('submit', async e => {
-  e.preventDefault(); const em = $('lgEmail').value.trim(), pw = $('lgPwd').value; if (!em || !pw) return;
+  e.preventDefault(); const code = normCode($('lgCode').value); if (code.length !== 8) { showLogin('El codi té 8 caràcters.', true); return; }
   $('lgBtn').disabled = true; showLogin('Entrant…');
-  try { await setPersistence(auth, $('lgKeep').checked ? browserLocalPersistence : browserSessionPersistence); await signInWithEmailAndPassword(auth, em, pw); }
-  catch (er) { showLogin(ERR[er.code] || 'No s’ha pogut entrar. Torna-ho a provar.', true); }
+  try {
+    try { localStorage.setItem(KEEP_K, $('lgKeep').checked ? '1' : '0'); } catch (_) {}
+    let { data: { session } } = await sb.auth.getSession();
+    if (!session) { const r = await sb.auth.signInAnonymously(); fail(r.error, 'auth'); session = r.data.session; }
+    const { error } = await sb.from('sessions').upsert({ uid: session.user.id, code, at: new Date().toISOString() });
+    if (error) throw { code: 'bad-code' };
+    if (!(await start())) throw { code: 'bad-code' };
+  } catch (er) { console.warn(er); showLogin(er && /fetch|network/i.test(er.message || '') ? 'No hi ha connexió a internet.' : 'Codi incorrecte o desactivat. Revisa’l o demana’n un a l’equip tècnic.', true); }
   $('lgBtn').disabled = false;
 });
-$('lgForgot').addEventListener('click', async () => {
-  const em = $('lgEmail').value.trim(); if (!em) { showLogin('Escriu primer el teu correu i torna a prémer «He oblidat la contrasenya».', true); return; }
-  try { await sendPasswordResetEmail(auth, em); } catch (_) {}
-  showLogin('Si aquest correu té compte, t’hi hem enviat un enllaç per crear una contrasenya nova.');
-});
-window.FAE_LOGOUT = async () => { await signOut(auth); location.reload(); };
-
-let started = false;
-onAuthStateChanged(auth, async user => {
-  if (!user) { if (started) location.reload(); showLogin(''); return; }
-  try {
-    let s = await getDoc(doc(fs, 'users', user.uid));
-    if (!s.exists() && (user.email || '').toLowerCase() === (CFG.bootstrapEmail || '').toLowerCase()) {
-      await setDoc(doc(fs, 'users', user.uid), { email: user.email, name: '', role: 'staff', eq: '', aid: '', active: true, created: new Date().toISOString(), by: 'inici' });
-      s = await getDoc(doc(fs, 'users', user.uid));
-    }
-    if (!s.exists() || s.data().active === false) { keepMsg = ['Aquest compte no té accés a la plataforma. Parla amb l’equip tècnic de la FAE.', true]; await signOut(auth); showLogin('Aquest compte no té accés a la plataforma. Parla amb l’equip tècnic de la FAE.', true); return; }
-    const d = s.data();
-    P = { uid: user.uid, email: user.email, name: d.name || user.email, role: d.role, eq: d.eq || '', aid: d.aid || '' };
-    window.FAE_USER = P;
-    $('login').hidden = true; started = true;
-    window.__faeReady({ cap });
-  } catch (e) { console.error(e); showLogin('No s’ha pogut carregar el teu perfil. Torna-ho a provar.', true); }
-});
+window.FAE_LOGOUT = async () => {
+  try { const { data: { session } } = await sb.auth.getSession(); if (session) await sb.from('sessions').delete().eq('uid', session.user.id); } catch (_) {}
+  await sb.auth.signOut(); location.reload();
+};
+(async () => { try { if (!(await start())) showLogin(''); } catch (e) { console.error(e); showLogin(''); } })();
 
 </script>
 </body>
