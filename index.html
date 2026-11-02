@@ -281,6 +281,16 @@ window.claude = { use: async n => (await window.FAE_READY).cap(n) };
 </div>
 
 <style>
+.pdfbtn{background:var(--bad-soft)!important;color:var(--bad)!important;border-color:color-mix(in srgb,var(--bad) 30%,var(--line))!important}
+.pdflist{display:flex;flex-direction:column;gap:8px}
+.pdfrow{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink)}
+.pdfrow:hover{background:var(--surface-2,#f5f7fa)}
+.pdfrow>span:nth-child(2){flex:1;min-width:0;display:flex;flex-direction:column}
+.pdfrow b{font-size:14px;overflow-wrap:anywhere}
+.pdfic{flex:none;width:38px;height:38px;border-radius:8px;background:var(--bad);color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center}
+.pdfgo{color:var(--focus,#1f5fae);font-weight:600;font-size:13px;white-space:nowrap}
+</style>
+<style>
 .recs.recgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .recs.recgrid>li{display:block;border:1px solid var(--line);border-radius:12px;padding:12px 12px 12px 44px;position:relative;background:#fff;break-inside:avoid}
 .recs.recgrid>li::before{position:absolute;left:12px;top:12px}
@@ -714,7 +724,7 @@ table.wut th,table.wut td{text-align:center} table.wut th:first-child,table.wut 
 .lg-z.warn{background:var(--warn-soft);border:1px solid #f3d3a5}
 .pfgchips{margin:2px 0 8px}.pftchips{margin:0 0 12px}
 .uchip{display:inline-flex;flex-direction:column;line-height:1.15;text-align:right;margin-left:8px}.uchip b{font-size:13px}.uchip .note{font-size:11px}
-.utab .u-off td{opacity:.55}.gra.gra-ok{background:linear-gradient(100deg,var(--ok-soft) 0%,var(--surface) 85%);border-color:color-mix(in srgb,var(--ok) 35%,var(--line))}.gra.gra-warn{background:linear-gradient(100deg,var(--warn-soft) 0%,var(--surface) 85%);border-color:color-mix(in srgb,var(--warn) 40%,var(--line))}.gra.gra-bad{background:linear-gradient(100deg,var(--bad-soft) 0%,var(--surface) 85%);border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}.grleg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--muted);margin:-4px 0 4px}.grleg i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:6px;vertical-align:-2px}.gl-ok{background:var(--ok)}.gl-warn{background:var(--warn)}.gl-bad{background:var(--bad)}.lesbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 16px;border:1px solid color-mix(in srgb,var(--bad) 35%,var(--line));border-radius:12px;background:linear-gradient(100deg,var(--bad-soft),var(--surface) 70%)}.lesbar b{font-size:15px}.lesbar .sel{min-width:220px}.lesbar .note{flex-basis:100%;margin:0}.fwk{border-left:6px solid var(--muted)}.fwk.fw-ok{border-left-color:var(--ok);background:linear-gradient(90deg,var(--ok-soft),transparent 60%)}.fwk.fw-warn{border-left-color:var(--warn)}.fwk.fw-bad{border-left-color:var(--bad);background:linear-gradient(90deg,var(--bad-soft),transparent 60%)}.fw-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.fw-row:first-of-type{border-top:0}.fw-ic{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:700;flex:none;color:#fff;background:var(--muted)}.fw-ok .fw-ic{background:var(--ok)}.fw-warn .fw-ic{background:var(--warn)}.fw-bad .fw-ic{background:var(--bad)}.fw-t{flex:1;min-width:0;display:flex;flex-direction:column}.fw-go-bad{background:var(--bad)!important;border-color:var(--bad)!important;color:#fff!important}.ucode{font-family:ui-monospace,Menlo,monospace;font-size:13px;letter-spacing:.06em;background:var(--bg,#f4f6f9);padding:2px 6px;border-radius:6px}.newcode{margin-top:14px;padding:14px 16px;border:1px dashed var(--ok);border-radius:12px;background:var(--ok-soft);display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}.newcode b{display:block;font-family:ui-monospace,Menlo,monospace;font-size:28px;letter-spacing:.12em;color:var(--ink)}.unew{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.utab .u-off td{opacity:.55}.gra.gra-ok{background:linear-gradient(100deg,var(--ok-soft) 0%,var(--surface) 85%);border-color:color-mix(in srgb,var(--ok) 35%,var(--line))}.gra.gra-warn{background:linear-gradient(100deg,var(--warn-soft) 0%,var(--surface) 85%);border-color:color-mix(in srgb,var(--warn) 40%,var(--line))}.gra.gra-bad{background:linear-gradient(100deg,var(--bad-soft) 0%,var(--surface) 85%);border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}.grleg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--muted);margin:-4px 0 4px}.grleg i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:6px;vertical-align:-2px}.gl-ok{background:var(--ok)}.gl-warn{background:var(--warn)}.gl-bad{background:var(--bad)}.lesbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 16px;border:1px solid color-mix(in srgb,var(--bad) 35%,var(--line));border-radius:12px;background:linear-gradient(100deg,var(--bad-soft),var(--surface) 70%)}.lesbar b{font-size:15px}.lesbar .sel{min-width:220px}.lesbar .note{flex-basis:100%;margin:0}.lesbig{display:flex;align-items:center;gap:16px;padding:18px 22px;border-radius:14px;background:var(--bad);color:#fff!important;text-decoration:none;box-shadow:0 6px 18px color-mix(in srgb,var(--bad) 30%,transparent)}.lesbig:hover{filter:brightness(1.06)}.lb-ic{font-size:30px;line-height:1}.lb-t{flex:1;display:flex;flex-direction:column}.lb-t b{font-size:20px;font-family:var(--f-display,inherit)}.lb-t span{font-size:13px;opacity:.9}.lb-go{font-size:26px;font-weight:700}.fwk{border-left:6px solid var(--muted)}.fwk.fw-ok{border-left-color:var(--ok);background:linear-gradient(90deg,var(--ok-soft),transparent 60%)}.fwk.fw-warn{border-left-color:var(--warn)}.fwk.fw-bad{border-left-color:var(--bad);background:linear-gradient(90deg,var(--bad-soft),transparent 60%)}.fw-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.fw-row:first-of-type{border-top:0}.fw-ic{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:700;flex:none;color:#fff;background:var(--muted)}.fw-ok .fw-ic{background:var(--ok)}.fw-warn .fw-ic{background:var(--warn)}.fw-bad .fw-ic{background:var(--bad)}.fw-t{flex:1;min-width:0;display:flex;flex-direction:column}.fw-go-bad{background:var(--bad)!important;border-color:var(--bad)!important;color:#fff!important}.ucode{font-family:ui-monospace,Menlo,monospace;font-size:13px;letter-spacing:.06em;background:var(--bg,#f4f6f9);padding:2px 6px;border-radius:6px}.newcode{margin-top:14px;padding:14px 16px;border:1px dashed var(--ok);border-radius:12px;background:var(--ok-soft);display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}.newcode b{display:block;font-family:ui-monospace,Menlo,monospace;font-size:28px;letter-spacing:.12em;color:var(--ink)}.unew{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
 .lg-c{background:rgba(154,63,180,.12);border:2px solid var(--esq)}
 .rep-pub{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
 .rep-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
@@ -1776,15 +1786,12 @@ function codesCsv(){
   toast('Llista descarregada (s’obre amb Excel o Numbers)');
 }
 
-/* Barra de lesió a la vista del grup (equip tècnic i entrenadors) */
+/* Banner de lesió a la vista del grup (equip tècnic i entrenadors): un sol clic al formulari */
 function lesioBar(list){
-  if(S.mode!=='staff' || (window.FAE_USER||{}).role==='athlete' || !list.length) return '';
-  if(!formUrl('lesio')) return editable()?`<div class="lesbar"><b>🩹 Fitxa de lesió</b><button class="btn ghost sm" data-a="tab" data-v="usuaris">Configurar l’enllaç del formulari</button></div>`:'';
-  const sel=list.find(a=>a.id===S.lesA), href=sel?formUrl('lesio',sel):formUrl('lesio');
-  return `<div class="lesbar"><b>🩹 Hi ha hagut una lesió?</b>
-    <select class="sel" id="lesSel"><option value="">Tria el corredor…</option>${list.map(a=>`<option value="${esc(a.id)}" ${a.id===S.lesA?'selected':''}>${esc(a.name)}</option>`).join('')}</select>
-    <a class="btn fw-go-bad" href="${esc(href)}" target="_blank" rel="noopener">Omplir la fitxa de lesió</a>
-    <p class="note">S’obre el formulari de lesions${sel?' amb el nom de '+esc(sel.name)+' ja posat':''}. També el tens a la fitxa de cada corredor.</p></div>`;
+  if(S.mode!=='staff' || (window.FAE_USER||{}).role==='athlete') return '';
+  const u=formUrl('lesio');
+  if(!u) return editable()?`<div class="lesbar"><b>🩹 Fitxa de lesió</b><button class="btn ghost sm" data-a="tab" data-v="usuaris">Configurar l’enllaç del formulari</button></div>`:'';
+  return `<a class="lesbig" href="${esc(u.replace(/=NOM(?=&|#|$)/g,'='))}" target="_blank" rel="noopener"><span class="lb-ic">🩹</span><span class="lb-t"><b>Emplenar fitxa de lesió</b><span>Obre el formulari de lesions</span></span><span class="lb-go">→</span></a>`;
 }
 
 /* ---------- views: global ---------- */
@@ -3110,6 +3117,9 @@ function medicaAthlete(a){
   const s=SALUT[a.id]; if(!s||!s.estat) return benEmpty(a,'l’àrea mèdica');
   const E=s.estat||{}, gc=genCls(E.gen), H=(s.hist||[]).slice().sort((x,y)=>(y.d||'').localeCompare(x.d||'')), act=H.filter(h=>histCls(h.estat)!=='ok');
   const docLink = l => /^https?:\/\//.test(l) ? `<a href="${esc(l)}" target="_blank" rel="noopener">Obrir</a>` : esc(l||'–');
+  const PDF=(s.pdfs||[]).filter(p=>/^https:\/\//.test(p.u||'')), near=(x,y)=>x&&y&&Math.abs(Date.parse(x)-Date.parse(y))<=10*864e5;
+  const pdfOf = h => PDF.filter(p=>near(p.d,h.ini)||near(p.d,h.d));
+  const pdfBtn = p => `<a class="btn sm pdfbtn" href="${esc(p.u)}" target="_blank" rel="noopener">📄 Informe mèdic${p.d?' · '+esc(fmtDay(p.d)):''}</a>`;
   return `${benBar(a)}
   <div class="bhero lv-${gc}"><div class="bh-main"><div class="eyebrow">Estat de salut actual</div><div class="bgen"><span class="bdot lv-${gc}"></span>${esc(genTxt(E.gen))}</div>${E.resum?`<p>${esc(E.resum)}</p>`:''}<div class="note">${E.upd?'Actualitzat el '+esc(fmtDay(E.upd))+(E.qui?' per '+esc(E.qui):''):'Valoració de l’equip mèdic'}</div></div>
     <div class="bh-ad"><div class="bnum lv-${act.length?'warn':'ok'}">${act.length}</div><div><b>${act.length===1?'Problema en seguiment':'Problemes en seguiment'}</b><div class="note">${H.length} ${H.length===1?'registre':'registres'} a l’historial</div></div></div></div>
@@ -3117,7 +3127,9 @@ function medicaAthlete(a){
    ${H.length?`<div class="bhist">${H.map(h=>`<article class="bhc lv-${histCls(h.estat)}"><div class="bhc-d"><b>${esc(h.d?fmtDay(h.d):'–')}</b>${h.ini&&h.ini!==h.d?`<span class="note">inici ${esc(fmtDay(h.ini))}</span>`:''}</div>
       <div class="bhc-b"><div class="bhc-t"><span class="tag">${esc(h.tipus||'Registre')}</span><b>${esc(h.zona||'')}</b>${h.costat?`<span class="note">· ${esc(h.costat)}</span>`:''}</div>
       <p>${esc(h.desc||'')}</p>
+      ${pdfOf(h).length?`<div class="row" style="gap:6px;margin:4px 0 6px">${pdfOf(h).map(pdfBtn).join('')}</div>`:''}
       <div class="bhc-f"><span class="pill ${histCls(h.estat)}">${esc(h.estat||'Sense estat')}</span>${h.urg?`<span class="note">Urgència: ${esc(h.urg)}</span>`:''}${h.ass?`<span class="note">Assegurança: ${esc(h.ass)}</span>`:''}<span class="note">${esc(h.font||'')}${h.qui?' · '+esc(h.qui):''}</span></div></div></article>`).join('')}</div>`:'<p class="empty-t">Cap registre de salut aquesta temporada.</p>'}</div>
+  ${PDF.length?`<div class="panel"><div class="panel-h"><div><h2>Informes mèdics</h2><div class="note">PDF de les fitxes de lesió al Drive de l’equip mèdic. S’obren amb el compte de Google que hi tingui accés.</div></div></div><div class="pdflist">${PDF.map(p=>`<a class="pdfrow" href="${esc(p.u)}" target="_blank" rel="noopener"><span class="pdfic">PDF</span><span><b>${esc(p.t)}</b>${p.d?`<span class="note">${esc(fmtDay(p.d))}</span>`:''}</span><span class="pdfgo">Obrir →</span></a>`).join('')}</div></div>`:''}
   <div class="panel"><div class="panel-h"><h2>Documents</h2></div>${(s.docs||[]).length?`<div class="tw"><table><thead><tr><th>Data</th><th>Tipus</th><th>Document</th><th>Notes</th></tr></thead><tbody>${s.docs.map(d=>`<tr><td class="mono">${esc(d.d?fmtDay(d.d):'–')}</td><td>${esc(d.tipus||'')}</td><td>${docLink(d.link)}</td><td class="note">${esc(d.notes||'')}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty-t">Encara no hi ha documents.</p>'}
    ${E.contact?`<p class="note bcontact">📞 ${esc(E.contact)}</p>`:''}</div>`;
 }
@@ -3709,7 +3721,6 @@ document.addEventListener('change', async e=>{
   if(id==='ueEq'&&S.ue){ S.ue.eq=t.value; return; }
   if(id==='ueAid'&&S.ue){ S.ue.aid=t.value; return; }
   if(id==='impFile'&&t.files&&t.files[0]){ importFile(t.files[0]); return; }
-  if(id==='lesSel'){ S.lesA=t.value; renderMain(); return; }
   if(id==='gCmp'){ S.gCmp=t.value||null; renderMain(); }
   if(id==='fCmp'){ S.fCmp=t.value||null; renderMain(); }
   if(id==='pCmp'){ S.pCmp=t.value||null; renderMain(); }
